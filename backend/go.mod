@@ -4,8 +4,12 @@ go 1.23.6
 
 require (
 	github.com/fatih/color v1.18.0
+	github.com/go-chi/chi/v5 v5.2.1
 	github.com/go-chi/render v1.0.3
+	github.com/google/wire v0.6.0
 	github.com/joho/godotenv v1.5.1
+	github.com/rs/cors v1.11.1
+	github.com/sirupsen/logrus v1.9.3
 )
 
 require (

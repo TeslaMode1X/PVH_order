@@ -1,18 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"github.com/TeslaMode1X/PVH_order/internal/config"
+	"github.com/TeslaMode1X/PVH_order/internal/di"
+	"github.com/TeslaMode1X/PVH_order/pkg/logger"
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello from Go server!")
-	})
+	cfg := config.LoadConfig()
+	log := logger.New()
 
-	fmt.Println("Server starting on :8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal("Server failed to start:", err)
+	if server, err := di.InitializeAPI(cfg, log); err == nil {
+		server.Start(cfg, log)
 	}
 }

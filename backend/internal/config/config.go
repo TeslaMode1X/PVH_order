@@ -22,11 +22,11 @@ const (
 var GlobalEnv Environment
 
 type Config struct {
-	configDB.Database
-	configSrv.Server
+	DB     configDB.Database
+	Server configSrv.Server
 }
 
-func LoadConfig(env Environment) *Config {
+func LoadConfig() *Config {
 	err := loadFlags()
 	if err != nil {
 		log.Fatal(err)
@@ -41,8 +41,8 @@ func LoadConfig(env Environment) *Config {
 	srv := configSrv.InitServerConfig()
 
 	return &Config{
-		Database: db,
-		Server:   srv,
+		DB:     db,
+		Server: srv,
 	}
 }
 
