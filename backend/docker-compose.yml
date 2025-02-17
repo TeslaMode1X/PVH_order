@@ -25,6 +25,7 @@ services:
     env_file:
       - ./.env
     command:
+#      u have to change it, if you're expose port
       [ "-source", "file://migrations", "-database", "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?sslmode=disable", "up" ]
     depends_on:
       db:
