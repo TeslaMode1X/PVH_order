@@ -57,7 +57,7 @@ func (r *Repository) UserRegistration(ctx context.Context, registration auth.Reg
 	}
 
 	stmt, err := r.DB.PrepareContext(ctx, `
-        INSERT INTO users (id, name, email, password, created_at, updated_at)
+        INSERT INTO users (id, username, email, password, created_at, updated_at)
         VALUES ($1, $2, $3, $4, $5, $6)
     `)
 	if err != nil {

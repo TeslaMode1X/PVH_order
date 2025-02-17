@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/models/auth"
+	_ "github.com/lib/pq"
 	"golang.org/x/net/context"
 )
 
@@ -32,7 +33,7 @@ func (r *Repository) CheckUserExists(ctx context.Context, email string) (bool, e
 func (r *Repository) FindUserByID(ctx context.Context, id string) (*auth.User, error) {
 	const op = "repo.user.FindUserByID"
 
-	stmt, err := r.DB.PrepareContext(ctx, `SELECT id, name, email, role FROM users WHERE id = $1`)
+	stmt, err := r.DB.PrepareContext(ctx, `SELECT id, username, email, role FROM users WHERE id = $1`)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}

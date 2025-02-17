@@ -1,6 +1,7 @@
 package user
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
 	"github.com/TeslaMode1X/PVH_order/internal/service"
@@ -36,10 +37,17 @@ func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.Svc.GetUserByID(context.Background(), userID)
 	if err != nil {
-		if errors.Is(err, service.ErrUserNotFound) {
+		if errors.Is(err, sql.ErrNoRows) {
+			h.Log.Error("failed to find user by id", "error", err.Error())
 			responseApi.WriteError(w, r, http.StatusNotFound, slogError.Err(err))
 			return
 		}
+		if errors.Is(err, service.ErrUserNotFound) {
+			h.Log.Error("failed to find user by id", "error", err.Error())
+			responseApi.WriteError(w, r, http.StatusNotFound, slogError.Err(err))
+			return
+		}
+		h.Log.Error("failed to find user by id", "error", err.Error())
 		responseApi.WriteError(w, r, http.StatusBadRequest, slogError.Err(err))
 		return
 	}

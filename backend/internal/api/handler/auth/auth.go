@@ -50,25 +50,27 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := r.Cookie("jwt-token")
 	if err == nil {
+		h.Log.Error("jwt token expired", "error", err)
 		responseApi.WriteError(w, r, http.StatusUnauthorized, errors.New("already logged in"))
 		return
 	}
 
 	var user auth.Login
 	if err := jsonReader.ReadJson(w, r, &user); err != nil {
-		h.Log.Error("failed to read user from request", "error", err)
-		responseApi.WriteError(w, r, http.StatusInternalServerError, err)
+		h.Log.Error("failed to read user from request", "error", err.Error())
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
 		return
 	}
 
 	userID, err := h.Svc.LoginService(context.Background(), user)
 	if err != nil {
 		if errors.Is(err, service.ErrUserNotFound) {
+			h.Log.Error("user not found", "error", err.Error())
 			responseApi.WriteError(w, r, http.StatusNotFound, slogError.Err(service.ErrUserNotFound))
 			return
 		}
-		h.Log.Error("failed to login", "error", err)
-		responseApi.WriteError(w, r, http.StatusInternalServerError, err)
+		h.Log.Error("failed to login", "error", err.Error())
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
 		return
 	}
 
@@ -79,8 +81,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 
 	tokenString, err := token.SignedString([]byte("your-secret-key"))
 	if err != nil {
-		h.Log.Error("failed to sign token", "error", err)
-		responseApi.WriteError(w, r, http.StatusInternalServerError, err)
+		h.Log.Error("failed to sign token", "error", err.Error())
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
 		return
 	}
 	cookie = &http.Cookie{
@@ -104,8 +106,8 @@ func (h *Handler) Registration(w http.ResponseWriter, r *http.Request) {
 
 	var user auth.Registration
 	if err := jsonReader.ReadJson(w, r, &user); err != nil {
-		h.Log.Error("failed to read user from request", "error", err)
-		responseApi.WriteError(w, r, http.StatusInternalServerError, err)
+		h.Log.Error("failed to read user from request", "error", err.Error())
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
 		return
 	}
 
@@ -115,17 +117,17 @@ func (h *Handler) Registration(w http.ResponseWriter, r *http.Request) {
 	userID, err := h.Svc.RegistrationService(context.Background(), user)
 	if err != nil {
 		if errors.Is(err, service.ErrUserAlreadyExists) {
-			h.Log.Error("user already exists", "error", err)
+			h.Log.Error("user already exists", "error", err.Error())
 			responseApi.WriteError(w, r, http.StatusConflict, slogError.Err(service.ErrUserAlreadyExists))
 			return
 		}
 		if errors.Is(err, service.ErrUserNotFound) {
-			h.Log.Error("user does not exist", "error", err)
+			h.Log.Error("user does not exist", "error", err.Error())
 			responseApi.WriteError(w, r, http.StatusNotFound, slogError.Err(service.ErrUserNotFound))
 			return
 		}
-		h.Log.Error("failed to register user", "error", err)
-		responseApi.WriteError(w, r, http.StatusInternalServerError, err)
+		h.Log.Error("failed to register user", "error", err.Error())
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
 		return
 	}
 
