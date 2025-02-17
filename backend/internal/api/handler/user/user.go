@@ -1,0 +1,48 @@
+package user
+
+import (
+	"errors"
+	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
+	"github.com/TeslaMode1X/PVH_order/internal/service"
+	responseApi "github.com/TeslaMode1X/PVH_order/internal/utils/response"
+	"github.com/TeslaMode1X/PVH_order/pkg/logger/slogError"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"golang.org/x/net/context"
+	"log/slog"
+	"net/http"
+)
+
+type Handler struct {
+	Svc interfaces.UserService
+	Log *slog.Logger
+}
+
+func (h *Handler) NewUserHandler(r chi.Router) {
+	r.Route("/user", func(r chi.Router) {
+		r.Get("/{userId}", h.GetUserByID)
+	})
+}
+
+func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
+	const op = "handler.user.GetUserByID"
+
+	h.Log = h.Log.With(
+		slog.String("op", op),
+		slog.String("request_id", middleware.GetReqID(r.Context())),
+	)
+
+	var userID = chi.URLParam(r, "userId")
+
+	user, err := h.Svc.GetUserByID(context.Background(), userID)
+	if err != nil {
+		if errors.Is(err, service.ErrUserNotFound) {
+			responseApi.WriteError(w, r, http.StatusNotFound, slogError.Err(err))
+			return
+		}
+		responseApi.WriteError(w, r, http.StatusBadRequest, slogError.Err(err))
+		return
+	}
+
+	responseApi.WriteJson(w, r, http.StatusOK, user)
+}

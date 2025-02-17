@@ -9,12 +9,25 @@ package di
 import (
 	"github.com/TeslaMode1X/PVH_order/internal/api"
 	"github.com/TeslaMode1X/PVH_order/internal/config"
+	"github.com/TeslaMode1X/PVH_order/internal/db"
+	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/auth"
+	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/user"
 	"log/slog"
 )
 
 // Injectors from wire.go:
 
 func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error) {
-	serverHTTP := api.NewServerHTTP(cfg)
+	sqlDB, err := db.ConnectToDB(cfg)
+	if err != nil {
+		return nil, err
+	}
+	repository := auth.ProvideAuthRepository(sqlDB)
+	userRepository := user.ProvideUserRepository(sqlDB)
+	service := auth.ProvideAuthService(repository, userRepository)
+	handler := auth.ProvideAuthHandler(service, log)
+	userService := user.ProvideUserService(userRepository)
+	userHandler := user.ProvideUserHandler(userService, log)
+	serverHTTP := api.NewServerHTTP(cfg, handler, userHandler)
 	return serverHTTP, nil
 }

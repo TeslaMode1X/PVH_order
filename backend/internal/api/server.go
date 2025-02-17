@@ -2,6 +2,8 @@ package api
 
 import (
 	"fmt"
+	authHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/auth"
+	userHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/user"
 	"github.com/TeslaMode1X/PVH_order/internal/config"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -15,7 +17,8 @@ type ServerHTTP struct {
 	router http.Handler
 }
 
-func NewServerHTTP(cfg *config.Config) *ServerHTTP {
+func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
+	userHandler *userHdl.Handler) *ServerHTTP {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -23,13 +26,12 @@ func NewServerHTTP(cfg *config.Config) *ServerHTTP {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Timeout(10 * time.Second))
 
-	handler := cors.AllowAll().Handler(r)
-
 	r.Route("/", func(r chi.Router) {
-		r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			fmt.Fprintf(w, "Hello from Go server!")
-		})
+		authHandler.NewAuthHandler(r)
+		userHandler.NewUserHandler(r)
 	})
+
+	handler := cors.AllowAll().Handler(r)
 
 	return &ServerHTTP{router: handler}
 }
