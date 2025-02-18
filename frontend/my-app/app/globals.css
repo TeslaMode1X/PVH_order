@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --veka-blue: #0072ce;
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+.container {
+  @apply max-w-7xl;
+}
+
