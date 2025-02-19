@@ -8,7 +8,7 @@ export default function Contact() {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
           <p className="mb-4">
-            We're here to answer any questions you may have about our windows or services. Feel free to reach out to us
+            We&apos;re here to answer any questions you may have about our windows or services. Feel free to reach out to us
             using the contact information below or by filling out the form.
           </p>
           <div className="mb-4">

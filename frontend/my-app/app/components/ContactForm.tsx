@@ -43,6 +43,8 @@ export default function ContactForm() {
         setSubmitMessage("An error occurred. Please try again.")
       }
     } catch (error) {
+      // TODO тут была ошибка, типо error не используется.
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       setSubmitMessage("An error occurred. Please try again.")
     } finally {
       setIsSubmitting(false)
