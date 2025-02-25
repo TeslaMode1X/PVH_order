@@ -1,10 +1,10 @@
 [
   {
-    "id": 1,
+    "id": "06e9d411-5cd2-4b79-aaec-b7184e8a993d",
     "name": "Rexay Comfort 70",
-    "type_id": 1,
-    "material_id": 1,
-    "system_id": 1,
+    "type_id": "1e689809-8fcf-46af-ae1a-a27103ba1175",
+    "material_id": "bd0ff80b-f2a4-42fc-a17c-5da07029fd84",
+    "system_id": "6fc71acf-398b-4db5-93d2-6fa8532fd7e5",
     "characteristics": {
       "profile": "Softline 70",
       "executions": ["Белое", "Цветное"],
@@ -19,11 +19,11 @@
     }
   },
   {
-    "id": 2,
+    "id": "d01755cf-1ab6-4946-9711-7881ba1dcd8b",
     "name": "Brusbox Energy 82",
-    "type_id": 1,
-    "material_id": 1,
-    "system_id": 2,
+    "type_id": "1e689809-8fcf-46af-ae1a-a27103ba1175",
+    "material_id": "bd0ff80b-f2a4-42fc-a17c-5da07029fd84",
+    "system_id": "391a8434-44db-4935-a272-26fda6ae7893",
     "characteristics": {
       "profile": "Brusbox 82",
       "executions": ["Белое", "Ламинированное"],
@@ -38,11 +38,11 @@
     }
   },
   {
-    "id": 3,
+    "id": "5c620bfb-f96d-4305-9b5e-29e3e19cd50d",
     "name": "Краус Fireproof 60",
-    "type_id": 2,
-    "material_id": 2,
-    "system_id": 3,
+    "type_id": "fd6a12d7-791d-41ea-a0a0-8f2ac5d8baae",
+    "material_id": "d955ac25-2825-4d1f-9c79-b25f146475ad",
+    "system_id": "e25e4859-7c8d-498b-9469-652e6e059ca3",
     "characteristics": {
       "profile": "Краус FP 60",
       "executions": ["Белое", "Антрацит"],
@@ -57,11 +57,11 @@
     }
   },
   {
-    "id": 4,
+    "id": "771d682d-dca8-49b5-9882-ecd277b3aaf3",
     "name": "Алютех Thermo 72",
-    "type_id": 1,
-    "material_id": 2,
-    "system_id": 4,
+    "type_id": "1e689809-8fcf-46af-ae1a-a27103ba1175",
+    "material_id": "d955ac25-2825-4d1f-9c79-b25f146475ad",
+    "system_id": "b213d020-3cbd-46b2-94fd-bb268930bb14",
     "characteristics": {
       "profile": "Алютех 72",
       "executions": ["Анодированное", "Порошковая покраска"],

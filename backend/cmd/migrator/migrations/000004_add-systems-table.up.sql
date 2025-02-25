@@ -1,5 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS systems (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL UNIQUE,
-    material_id INT NOT NULL REFERENCES materials(id) ON DELETE CASCADE
+    material_id UUID NOT NULL REFERENCES materials(id) ON DELETE CASCADE
 );

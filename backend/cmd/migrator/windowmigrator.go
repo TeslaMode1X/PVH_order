@@ -13,9 +13,9 @@ import (
 )
 
 type WindowType struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          uuid.UUID `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
 }
 
 type Material struct {
@@ -24,17 +24,17 @@ type Material struct {
 }
 
 type System struct {
-	ID         int    `json:"id"`
-	Name       string `json:"name"`
-	MaterialID int    `json:"material_id"`
+	ID         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	MaterialID uuid.UUID `json:"material_id"`
 }
 
 type WindowModel struct {
-	ID              int             `json:"id"`
+	ID              uuid.UUID       `json:"id"`
 	Name            string          `json:"name"`
-	TypeID          int             `json:"type_id"`
-	MaterialID      int             `json:"material_id"`
-	SystemID        int             `json:"system_id"`
+	TypeID          uuid.UUID       `json:"type_id"`
+	MaterialID      uuid.UUID       `json:"material_id"`
+	SystemID        uuid.UUID       `json:"system_id"`
 	Characteristics json.RawMessage `json:"characteristics"`
 }
 

@@ -1,22 +1,22 @@
 [
   {
-    "id": 1,
+    "id": "6fc71acf-398b-4db5-93d2-6fa8532fd7e5",
     "name": "Rexay",
-    "material_id": 1
+    "material_id": "bd0ff80b-f2a4-42fc-a17c-5da07029fd84"
   },
   {
-    "id": 2,
+    "id": "391a8434-44db-4935-a272-26fda6ae7893",
     "name": "Brusbox",
-    "material_id": 1
+    "material_id": "bd0ff80b-f2a4-42fc-a17c-5da07029fd84"
   },
   {
-    "id": 3,
+    "id": "e25e4859-7c8d-498b-9469-652e6e059ca3",
     "name": "Краус",
-    "material_id": 2
+    "material_id": "d955ac25-2825-4d1f-9c79-b25f146475ad"
   },
   {
-    "id": 4,
+    "id": "b213d020-3cbd-46b2-94fd-bb268930bb14",
     "name": "Алютех",
-    "material_id": 2
+    "material_id": "d955ac25-2825-4d1f-9c79-b25f146475ad"
   }
 ]
