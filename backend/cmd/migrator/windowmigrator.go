@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/gofrs/uuid"
 	"log"
 	"os"
 
@@ -18,8 +19,8 @@ type WindowType struct {
 }
 
 type Material struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
 }
 
 type System struct {

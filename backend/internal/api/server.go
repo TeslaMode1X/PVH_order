@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	authHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/auth"
+	materialHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/materials"
 	userHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/user"
 	"github.com/TeslaMode1X/PVH_order/internal/config"
 	"github.com/go-chi/chi/v5"
@@ -18,7 +19,8 @@ type ServerHTTP struct {
 }
 
 func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
-	userHandler *userHdl.Handler) *ServerHTTP {
+	userHandler *userHdl.Handler,
+	materialHandler *materialHdl.Handler) *ServerHTTP {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -29,6 +31,7 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 	r.Route("/", func(r chi.Router) {
 		authHandler.NewAuthHandler(r)
 		userHandler.NewUserHandler(r)
+		materialHandler.NewMaterialHandler(r)
 	})
 
 	handler := cors.AllowAll().Handler(r)
