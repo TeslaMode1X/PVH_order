@@ -1,0 +1,10 @@
+FROM golang:1.23.6-alpine
+
+WORKDIR /app
+
+COPY ../cmd/json_migrations/ ./json_migrations/
+COPY ../cmd/migrator/windowmigrator.go .
+
+RUN go mod init window-migrator
+RUN go mod tidy
+RUN go build -o windowmigrator windowmigrator.go

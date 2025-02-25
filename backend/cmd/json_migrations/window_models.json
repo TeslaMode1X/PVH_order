@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1,
+    "name": "Rexay Comfort 70",
+    "type_id": 1,
+    "material_id": 1,
+    "system_id": 1,
+    "characteristics": {
+      "profile": "Softline 70",
+      "executions": ["Белое", "Цветное"],
+      "seal_colors": ["Карамель", "Чёрный", "Серый"],
+      "seal_material": ["АРТК", "ТРЕ"],
+      "chambers": "5",
+      "glass_type": "Двухкамерный энергосберегающий стеклопакет",
+      "width": 70,
+      "thermal_resistance": 0.85,
+      "falz_height": 24,
+      "frame_sash_height": 120
+    }
+  },
+  {
+    "id": 2,
+    "name": "Brusbox Energy 82",
+    "type_id": 1,
+    "material_id": 1,
+    "system_id": 2,
+    "characteristics": {
+      "profile": "Brusbox 82",
+      "executions": ["Белое", "Ламинированное"],
+      "seal_colors": ["Серый", "Черный"],
+      "seal_material": ["ТРЕ"],
+      "chambers": "7",
+      "glass_type": "Трехкамерный стеклопакет с напылением",
+      "width": 82,
+      "thermal_resistance": 1.1,
+      "falz_height": 25,
+      "frame_sash_height": 125
+    }
+  },
+  {
+    "id": 3,
+    "name": "Краус Fireproof 60",
+    "type_id": 2,
+    "material_id": 2,
+    "system_id": 3,
+    "characteristics": {
+      "profile": "Краус FP 60",
+      "executions": ["Белое", "Антрацит"],
+      "seal_colors": ["Черный"],
+      "seal_material": ["АРТК"],
+      "chambers": "6",
+      "glass_type": "Противопожарный стеклопакет",
+      "width": 60,
+      "thermal_resistance": 0.95,
+      "falz_height": 23,
+      "frame_sash_height": 118
+    }
+  },
+  {
+    "id": 4,
+    "name": "Алютех Thermo 72",
+    "type_id": 1,
+    "material_id": 2,
+    "system_id": 4,
+    "characteristics": {
+      "profile": "Алютех 72",
+      "executions": ["Анодированное", "Порошковая покраска"],
+      "seal_colors": ["Серый"],
+      "seal_material": ["ТРЕ"],
+      "chambers": "3",
+      "glass_type": "Двухкамерный стеклопакет с защитой от шума",
+      "width": 72,
+      "thermal_resistance": 1.05,
+      "falz_height": 22,
+      "frame_sash_height": 122
+    }
+  }
+]

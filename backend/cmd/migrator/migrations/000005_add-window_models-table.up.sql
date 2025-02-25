@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS window_models (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type_id INT NOT NULL REFERENCES window_types(id) ON DELETE CASCADE,
+    material_id INT NOT NULL REFERENCES materials(id) ON DELETE CASCADE,
+    system_id INT NOT NULL REFERENCES systems(id) ON DELETE CASCADE,
+    characteristics JSONB NOT NULL DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

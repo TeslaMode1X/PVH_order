@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Rexay",
+    "material_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Brusbox",
+    "material_id": 1
+  },
+  {
+    "id": 3,
+    "name": "Краус",
+    "material_id": 2
+  },
+  {
+    "id": 4,
+    "name": "Алютех",
+    "material_id": 2
+  }
+]
