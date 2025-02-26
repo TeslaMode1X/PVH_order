@@ -66,7 +66,7 @@ services:
     container_name: pvh_frontend
     restart: always
     build:
-      context: ../frontend/my-app
+      context: ../frontend/window_company2
       dockerfile: Dockerfile
     expose:
       - "3000"

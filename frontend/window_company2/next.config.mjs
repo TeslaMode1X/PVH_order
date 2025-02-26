@@ -1,12 +1,14 @@
-let userConfig = undefined
+let userConfig = {}
 try {
-  userConfig = await import('./v0-user-next.config')
+  const imported = await import('./v0-user-next.config')
+  userConfig = imported.default || {}
 } catch (e) {
   // ignore error
 }
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -18,31 +20,36 @@ const nextConfig = {
   },
   experimental: {
     webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
-  },
-}
-
-mergeConfig(nextConfig, userConfig)
-
-function mergeConfig(nextConfig, userConfig) {
-  if (!userConfig) {
-    return
-  }
-
-  for (const key in userConfig) {
-    if (
-      typeof nextConfig[key] === 'object' &&
-      !Array.isArray(nextConfig[key])
-    ) {
-      nextConfig[key] = {
-        ...nextConfig[key],
-        ...userConfig[key],
-      }
-    } else {
-      nextConfig[key] = userConfig[key]
-    }
   }
 }
 
-export default nextConfig
+const finalConfig = {
+  ...nextConfig,
+  ...userConfig,
+}
+
+export default finalConfig
+
+// mergeConfig(nextConfig, userConfig)
+//
+// function mergeConfig(nextConfig, userConfig) {
+//   if (!userConfig) {
+//     return
+//   }
+//
+//   for (const key in userConfig) {
+//     if (
+//       typeof nextConfig[key] === 'object' &&
+//       !Array.isArray(nextConfig[key])
+//     ) {
+//       nextConfig[key] = {
+//         ...nextConfig[key],
+//         ...userConfig[key],
+//       }
+//     } else {
+//       nextConfig[key] = userConfig[key]
+//     }
+//   }
+// }
+//
+// export default nextConfig
