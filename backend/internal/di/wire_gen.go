@@ -12,6 +12,7 @@ import (
 	"github.com/TeslaMode1X/PVH_order/internal/db"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/auth"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/materials"
+	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/systems"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/user"
 	"log/slog"
 )
@@ -32,6 +33,9 @@ func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error
 	materialsRepository := materials.ProvideMaterialRepository(sqlDB)
 	materialsService := materials.ProvideMaterialService(materialsRepository)
 	materialsHandler := materials.ProvideMaterialHandler(materialsService, log)
-	serverHTTP := api.NewServerHTTP(cfg, handler, userHandler, materialsHandler)
+	systemsRepository := systems.ProvideSystemsRepository(sqlDB)
+	systemsService := systems.ProvideSystemsService(systemsRepository, materialsRepository)
+	systemsHandler := systems.ProvideSystemsHandler(systemsService, log)
+	serverHTTP := api.NewServerHTTP(cfg, handler, userHandler, materialsHandler, systemsHandler)
 	return serverHTTP, nil
 }

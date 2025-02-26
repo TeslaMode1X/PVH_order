@@ -13,6 +13,8 @@ type (
 		CreateMaterialRepository(ctx context.Context, materialName materials.Create) error
 		UpdateMaterialByIdRepository(ctx context.Context, updatedMaterial *materials.Object) error
 		DeleteMaterialByIdRepository(ctx context.Context, id string) error
+		MaterialExistsByName(ctx context.Context, name string) (bool, error)
+		GetMaterialIdByName(ctx context.Context, name string) (string, error)
 	}
 )
 

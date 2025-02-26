@@ -9,6 +9,7 @@ import (
 	"github.com/TeslaMode1X/PVH_order/internal/db"
 	authProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/auth"
 	materialProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/materials"
+	systemProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/systems"
 	userProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/user"
 	"github.com/google/wire"
 	"log/slog"
@@ -19,6 +20,7 @@ func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error
 		authProvider.ProviderSet,
 		userProvider.ProviderSet,
 		materialProvider.ProviderSet,
+		systemProvider.ProviderSet,
 
 		db.ConnectToDB,
 		api.NewServerHTTP,

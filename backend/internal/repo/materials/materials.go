@@ -2,6 +2,7 @@ package materials
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/models/materials"
 	"github.com/gofrs/uuid"
@@ -110,4 +111,43 @@ func (r *Repository) DeleteMaterialByIdRepository(ctx context.Context, id string
 	}
 
 	return nil
+}
+
+func (r *Repository) MaterialExistsByName(ctx context.Context, name string) (bool, error) {
+	const op = "repo.materials.MaterialExistsByName"
+
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT EXISTS (SELECT 1 FROM materials WHERE name = $1)")
+	if err != nil {
+		return false, fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	var exists bool
+	err = stmt.QueryRowContext(ctx, name).Scan(&exists)
+	if err != nil {
+		return false, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return exists, nil
+}
+
+func (r *Repository) GetMaterialIdByName(ctx context.Context, name string) (string, error) {
+	const op = "repo.materials.GetMaterialIdByName"
+
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT id FROM materials WHERE name = $1")
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	var materialID string
+	err = stmt.QueryRowContext(ctx, name).Scan(&materialID)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return "", fmt.Errorf("%s: %w", op, errors.New("material doesn't exist"))
+		}
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return materialID, nil
 }
