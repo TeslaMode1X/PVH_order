@@ -6,6 +6,7 @@ import (
 	materialHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/materials"
 	systemsHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/systems"
 	userHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/user"
+	windowMdlHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/windowmodels"
 	windowHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/windowtypes"
 	"github.com/TeslaMode1X/PVH_order/internal/config"
 	"github.com/go-chi/chi/v5"
@@ -24,7 +25,8 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 	userHandler *userHdl.Handler,
 	materialHandler *materialHdl.Handler,
 	systemHandler *systemsHdl.Handler,
-	windowHandler *windowHdl.Handler) *ServerHTTP {
+	windowHandler *windowHdl.Handler,
+	windowModelGandler *windowMdlHdl.Handler) *ServerHTTP {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -38,6 +40,7 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 		materialHandler.NewMaterialHandler(r)
 		systemHandler.NewSystemsHandler(r)
 		windowHandler.NewWindowTypesHandler(r)
+		windowModelGandler.NewWindowModelHandler(r)
 	})
 
 	handler := cors.AllowAll().Handler(r)
