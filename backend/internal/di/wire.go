@@ -11,6 +11,7 @@ import (
 	materialProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/materials"
 	systemProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/systems"
 	userProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/user"
+	windowProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/windowtypes"
 	"github.com/google/wire"
 	"log/slog"
 )
@@ -21,6 +22,7 @@ func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error
 		userProvider.ProviderSet,
 		materialProvider.ProviderSet,
 		systemProvider.ProviderSet,
+		windowProvider.ProviderSet,
 
 		db.ConnectToDB,
 		api.NewServerHTTP,
