@@ -57,7 +57,7 @@ services:
     expose:
       - "8080"
     volumes:
-      - ./static:/static
+      - ./static/images:/app/static/images
     depends_on:
       db:
         condition: service_healthy
@@ -80,7 +80,7 @@ services:
     container_name: pvh_nginx
     restart: always
     volumes:
-      - ./static:/static
+      - ./static/images:/static/images
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - "80:80"
@@ -97,3 +97,4 @@ networks:
 
 volumes:
   static:
+
