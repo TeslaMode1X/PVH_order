@@ -18,10 +18,13 @@ func (r *Repository) GetAllWindowModelsRepository(ctx context.Context) ([]*windo
 
 	query := `
 		SELECT wm.id, wm.name, 
-		       wt.name as type_name, 
-		       m.name as material_name, 
-		       s.name as system_name, 
-		       wm.characteristics
+			   wt.name as type_name, 
+			   m.name as material_name, 
+			   s.name as system_name, 
+			   wm.image_large,
+			   wm.image_medium,
+			   wm.image_small,
+			   wm.characteristics
 		FROM window_models wm
 		JOIN window_types wt ON wm.type_id = wt.id
 		JOIN materials m ON wm.material_id = m.id
@@ -46,6 +49,9 @@ func (r *Repository) GetAllWindowModelsRepository(ctx context.Context) ([]*windo
 			&model.TypeID,
 			&model.MaterialID,
 			&model.SystemID,
+			&model.LargeImagePath,
+			&model.MediumImagePath,
+			&model.SmallImagePath,
 			&characteristicsJSON,
 		)
 		if err != nil {
@@ -71,10 +77,13 @@ func (r *Repository) GetWindowModelByIDRepository(ctx context.Context, id string
 
 	query := `
 		SELECT wm.id, wm.name, 
-		       wt.name as type_name, 
-		       m.name as material_name, 
-		       s.name as system_name, 
-		       wm.characteristics
+			   wt.name as type_name, 
+			   m.name as material_name, 
+			   s.name as system_name, 
+			   wm.image_large,
+			   wm.image_medium,
+			   wm.image_small,
+			   wm.characteristics
 		FROM window_models wm
 		JOIN window_types wt ON wm.type_id = wt.id
 		JOIN materials m ON wm.material_id = m.id
@@ -97,6 +106,9 @@ func (r *Repository) GetWindowModelByIDRepository(ctx context.Context, id string
 		&model.TypeID,
 		&model.MaterialID,
 		&model.SystemID,
+		&model.LargeImagePath,
+		&model.MediumImagePath,
+		&model.SmallImagePath,
 		&characteristicsJSON,
 	)
 	if err != nil {

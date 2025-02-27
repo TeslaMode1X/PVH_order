@@ -5,6 +5,9 @@
     "type_id": "1e689809-8fcf-46af-ae1a-a27103ba1175",
     "material_id": "bd0ff80b-f2a4-42fc-a17c-5da07029fd84",
     "system_id": "6fc71acf-398b-4db5-93d2-6fa8532fd7e5",
+    "image_large": "./images/windows/rexay_comfort_70_large.jpg",
+    "image_medium": "./images/windows/rexay_comfort_70_medium.jpg",
+    "image_small": "./images/windows/rexay_comfort_70_small.png",
     "characteristics": {
       "profile": "Softline 70",
       "executions": ["Белое", "Цветное"],
@@ -24,6 +27,9 @@
     "type_id": "1e689809-8fcf-46af-ae1a-a27103ba1175",
     "material_id": "bd0ff80b-f2a4-42fc-a17c-5da07029fd84",
     "system_id": "391a8434-44db-4935-a272-26fda6ae7893",
+    "image_large": "./images/windows/brusbox_energy_82_large.jpg",
+    "image_medium": "./images/windows/brusbox_energy_82_medium.jpg",
+    "image_small": "./images/windows/brusbox_energy_82_small.jpg",
     "characteristics": {
       "profile": "Brusbox 82",
       "executions": ["Белое", "Ламинированное"],
@@ -62,6 +68,9 @@
     "type_id": "1e689809-8fcf-46af-ae1a-a27103ba1175",
     "material_id": "d955ac25-2825-4d1f-9c79-b25f146475ad",
     "system_id": "b213d020-3cbd-46b2-94fd-bb268930bb14",
+    "image_large": "./images/windows/alutech_thermo_72_large.jpg",
+    "image_medium": "./images/windows/alutech_thermo_72_medium.jpg",
+    "image_small": "./images/windows/alutech_thermo_72_small.jpg",
     "characteristics": {
       "profile": "Алютех 72",
       "executions": ["Анодированное", "Порошковая покраска"],

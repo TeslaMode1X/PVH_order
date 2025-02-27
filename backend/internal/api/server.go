@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	authHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/auth"
+	fileHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/file"
 	materialHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/materials"
 	systemsHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/systems"
 	userHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/user"
@@ -26,7 +27,8 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 	materialHandler *materialHdl.Handler,
 	systemHandler *systemsHdl.Handler,
 	windowHandler *windowHdl.Handler,
-	windowModelGandler *windowMdlHdl.Handler) *ServerHTTP {
+	windowModelHandler *windowMdlHdl.Handler,
+	fileHandler *fileHdl.Handler) *ServerHTTP {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -40,7 +42,8 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 		materialHandler.NewMaterialHandler(r)
 		systemHandler.NewSystemsHandler(r)
 		windowHandler.NewWindowTypesHandler(r)
-		windowModelGandler.NewWindowModelHandler(r)
+		windowModelHandler.NewWindowModelHandler(r)
+		fileHandler.NewFileHandler(r)
 	})
 
 	handler := cors.AllowAll().Handler(r)

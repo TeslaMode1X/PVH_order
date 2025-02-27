@@ -1,0 +1,36 @@
+-- Обновление для Rexay Comfort 70
+UPDATE window_models
+SET
+    image_large = './static/images/windows/rexay_comfort_70_large.jpg',
+    image_medium = './static/images/windows/rexay_comfort_70_medium.jpg',
+    image_small = './static/images/windows/rexay_comfort_70_small.png',
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = '06e9d411-5cd2-4b79-aaec-b7184e8a993d';
+
+-- Обновление для Brusbox Energy 82
+UPDATE window_models
+SET
+    image_large = './static/images/windows/brusbox_energy_82_large.jpg',
+    image_medium = './static/images/windows/brusbox_energy_82_medium.jpg',
+    image_small = './static/images/windows/brusbox_energy_82_small.jpg',
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = 'd01755cf-1ab6-4946-9711-7881ba1dcd8b';
+
+-- Обновление для Краус Fireproof 60
+-- Здесь мы оставляем пустые строки, так как в исходных данных нет путей к изображениям
+UPDATE window_models
+SET
+    image_large = '',
+    image_medium = '',
+    image_small = '',
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = '5c620bfb-f96d-4305-9b5e-29e3e19cd50d';
+
+-- Обновление для Алютех Thermo 72
+UPDATE window_models
+SET
+    image_large = './static/images/windows/alutech_thermo_72_large.jpg',
+    image_medium = './static/images/windows/alutech_thermo_72_medium.jpg',
+    image_small = './static/images/windows/alutech_thermo_72_small.jpg',
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = '771d682d-dca8-49b5-9882-ecd277b3aaf3';

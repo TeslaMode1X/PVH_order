@@ -6,6 +6,9 @@ type Object struct {
 	TypeID          string          `json:"type_id"`
 	MaterialID      string          `json:"material_id"`
 	SystemID        string          `json:"system_id"`
+	SmallImagePath  string          `json:"small_image_path"`
+	MediumImagePath string          `json:"medium_image_path"`
+	LargeImagePath  string          `json:"large_image_path"`
 	Characteristics Characteristics `json:"characteristics"`
 }
 

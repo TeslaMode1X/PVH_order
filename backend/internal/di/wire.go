@@ -8,6 +8,7 @@ import (
 	"github.com/TeslaMode1X/PVH_order/internal/config"
 	"github.com/TeslaMode1X/PVH_order/internal/db"
 	authProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/auth"
+	fileProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/file"
 	materialProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/materials"
 	systemProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/systems"
 	userProvider "github.com/TeslaMode1X/PVH_order/internal/domain/providers/user"
@@ -25,6 +26,7 @@ func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error
 		systemProvider.ProviderSet,
 		windowProvider.ProviderSet,
 		windowMdlProvider.ProviderSet,
+		fileProvider.ProviderSet,
 
 		db.ConnectToDB,
 		api.NewServerHTTP,
