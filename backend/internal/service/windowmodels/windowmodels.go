@@ -107,3 +107,77 @@ func (s *Service) CreateWindowModelService(ctx context.Context, largeImageData, 
 
 	return nil
 }
+
+func (s *Service) UpdateWindowModelCharacteristicsService(ctx context.Context, id string, characteristics windowmodels.CharacteristicsUpdate) error {
+	const op = "service.windowmodels.UpdateWindowModelCharacteristicsCheckerService"
+
+	if characteristics.TypeID != "" {
+		typeId, err := s.TypeRepo.GetWindowTypeIdByNameRepository(ctx, characteristics.TypeID)
+		if err != nil {
+			return fmt.Errorf("%s: %w", op, err)
+		}
+		characteristics.TypeID = typeId
+	}
+
+	if characteristics.MaterialID != "" {
+		materialId, err := s.MaterialRepo.GetMaterialIdByName(ctx, characteristics.MaterialID)
+		if err != nil {
+			return fmt.Errorf("%s: %w", op, err)
+		}
+		characteristics.MaterialID = materialId
+	}
+
+	if characteristics.SystemID != "" {
+		systemId, err := s.SystemRepo.GetSystemIdByNameRepository(ctx, characteristics.SystemID)
+		if err != nil {
+			return fmt.Errorf("%s: failed to get system id: %w", op, err)
+		}
+		characteristics.SystemID = systemId
+	}
+
+	err := s.WindowRepo.UpdateWindowModelCharacteristicsRepository(ctx, id, characteristics)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	return nil
+}
+
+func (s *Service) UpdateWindowModelCharacteristicsCheckerService(ctx context.Context, characteristics windowmodels.CharacteristicsUpdate) error {
+	const op = "service.windowmodels.UpdateWindowModelCharacteristicsCheckerService"
+	s.Log.Info("Characteristics in Service", characteristics)
+	s.Log.Info("UpdateWindowModelCharacteristicsCheckerService", "characteristics", characteristics.Profile)
+
+	if characteristics.Profile == "" {
+		return fmt.Errorf("%s: no characteristics profile specified", op)
+	}
+	if len(characteristics.Executions) == 0 {
+		return fmt.Errorf("%s: no characteristics executions specified", op)
+	}
+	if len(characteristics.SealColors) == 0 {
+		return fmt.Errorf("%s: no characteristics seal_colors specified", op)
+	}
+	if len(characteristics.SealMaterial) == 0 {
+		return fmt.Errorf("%s: no characteristics seal_material specified", op)
+	}
+	if characteristics.Chambers == "" {
+		return fmt.Errorf("%s: no characteristics chambers specified", op)
+	}
+	if characteristics.GlassType == "" {
+		return fmt.Errorf("%s: no characteristics glass_type specified", op)
+	}
+	if characteristics.Width <= 0 {
+		return fmt.Errorf("%s: invalid characteristics width", op)
+	}
+	if characteristics.ThermalResistance <= 0 {
+		return fmt.Errorf("%s: invalid characteristics thermal_resistance", op)
+	}
+	if characteristics.FalzHeight <= 0 {
+		return fmt.Errorf("%s: invalid characteristics falz_height", op)
+	}
+	if characteristics.FrameSashHeight <= 0 {
+		return fmt.Errorf("%s: invalid characteristics frame_sash_height", op)
+	}
+
+	return nil
+}

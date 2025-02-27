@@ -27,6 +27,7 @@ func (h *Handler) NewWindowModelHandler(r chi.Router) {
 		r.Post("/", h.CreateWindowModel)
 
 		r.Get("/{id}", h.GetWindowModelByID)
+		r.Put("/{id}", h.UpdateWindowModelCharacteristics)
 	})
 }
 
@@ -171,11 +172,11 @@ func (h *Handler) CreateWindowModel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.Log.Info("Creating window model",
-		slog.Any("objectCreate", objectCreate),
-		slog.Int("largeImageSize", len(largeImageBuf)),
-		slog.Int("mediumImageSize", len(mediumImageBuf)),
-		slog.Int("smallImageSize", len(smallImageBuf)))
+	//h.Log.Info("Creating window model",
+	//	slog.Any("objectCreate", objectCreate),
+	//	slog.Int("largeImageSize", len(largeImageBuf)),
+	//	slog.Int("mediumImageSize", len(mediumImageBuf)),
+	//	slog.Int("smallImageSize", len(smallImageBuf)))
 
 	err = h.Svc.CreateWindowModelService(
 		r.Context(),
@@ -190,4 +191,47 @@ func (h *Handler) CreateWindowModel(w http.ResponseWriter, r *http.Request) {
 	}
 
 	responseApi.WriteJson(w, r, http.StatusCreated, map[string]interface{}{"Window model created successfully": objectCreate})
+}
+
+func (h *Handler) UpdateWindowModelCharacteristics(w http.ResponseWriter, r *http.Request) {
+	const op = "handler.windowmodels.UpdateWindowModelCharacteristics"
+
+	h.Log = h.Log.With(
+		slog.String("op", op),
+		slog.String("request_id", middleware.GetReqID(r.Context())),
+	)
+
+	id := chi.URLParam(r, "id")
+
+	var objectUpdate windowmodels.CharacteristicsUpdate
+	objectData := r.FormValue("object_data")
+	if objectData == "" {
+		h.Log.Error("missing object data", slogError.Err(errors.New("missing object data")))
+		responseApi.WriteError(w, r, http.StatusBadRequest, errors.New("missing object data"))
+		return
+	}
+
+	if err := json.Unmarshal([]byte(objectData), &objectUpdate); err != nil {
+		h.Log.Error("error parsing object data", slogError.Err(err))
+		responseApi.WriteError(w, r, http.StatusBadRequest, slogError.Err(err))
+		return
+	}
+
+	h.Log.Info("Characteristics in handler", objectUpdate)
+
+	err := h.Svc.UpdateWindowModelCharacteristicsCheckerService(context.Background(), objectUpdate)
+	if err != nil {
+		h.Log.Error("service failed to update window model", slogError.Err(err))
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
+		return
+	}
+
+	err = h.Svc.UpdateWindowModelCharacteristicsService(context.Background(), id, objectUpdate)
+	if err != nil {
+		h.Log.Error("service failed to update window model", slogError.Err(err))
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
+		return
+	}
+
+	responseApi.WriteJson(w, r, http.StatusOK, map[string]interface{}{"Window model updated successfully": objectUpdate})
 }
