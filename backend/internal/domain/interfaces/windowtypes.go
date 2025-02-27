@@ -10,6 +10,7 @@ type (
 	WindowTypesRepository interface {
 		GetAllWindowTypesRepository(ctx context.Context) ([]*windowtypes.Object, error)
 		GetWindowTypeByIdRepository(ctx context.Context, id string) (*windowtypes.Object, error)
+		GetWindowTypeIdByNameRepository(ctx context.Context, name string) (string, error)
 		CreateWindowTypeRepository(ctx context.Context, creation windowtypes.ObjectCreation) error
 		UpdateWindowTypeRepository(ctx context.Context, id string, creation windowtypes.ObjectCreation) error
 		DeleteWindowTypeRepository(ctx context.Context, id string) error

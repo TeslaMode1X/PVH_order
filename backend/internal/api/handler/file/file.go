@@ -21,7 +21,7 @@ func (h *Handler) NewFileHandler(r chi.Router) {
 }
 
 func (h *Handler) GetStaticImage() http.Handler {
-	fs := http.FileServer(http.Dir("/app/static"))
+	fs := http.FileServer(http.Dir("/static"))
 
-	return http.StripPrefix("/api/file/", fs)
+	return http.StripPrefix("/api/file", fs)
 }

@@ -10,6 +10,7 @@ type (
 	SystemsRepository interface {
 		GetAllSystemsRepository(ctx context.Context) ([]*systems.Object, error)
 		GetSystemByIdRepository(ctx context.Context, id string) (*systems.Object, error)
+		GetSystemIdByNameRepository(ctx context.Context, name string) (string, error)
 		CreateSystemRepository(ctx context.Context, materialId string, creation systems.ObjectCreation) error
 		UpdateSystemByIdRepository(ctx context.Context, id, materialId string, creation systems.ObjectCreation) error
 		DeleteSystemByIdRepository(ctx context.Context, id string) error

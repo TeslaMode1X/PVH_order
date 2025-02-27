@@ -10,11 +10,11 @@ type (
 	MaterialRepository interface {
 		GetAllMaterialsRepository(ctx context.Context) ([]*materials.Object, error)
 		GetMaterialByIdRepository(ctx context.Context, id string) (*materials.Object, error)
+		GetMaterialIdByName(ctx context.Context, name string) (string, error)
 		CreateMaterialRepository(ctx context.Context, materialName materials.Create) error
 		UpdateMaterialByIdRepository(ctx context.Context, updatedMaterial *materials.Object) error
 		DeleteMaterialByIdRepository(ctx context.Context, id string) error
 		MaterialExistsByName(ctx context.Context, name string) (bool, error)
-		GetMaterialIdByName(ctx context.Context, name string) (string, error)
 	}
 )
 

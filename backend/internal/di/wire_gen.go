@@ -43,9 +43,9 @@ func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error
 	windowtypesService := windowtypes.ProvideWindowService(windowtypesRepository)
 	windowtypesHandler := windowtypes.ProvideWindowHandler(windowtypesService, log)
 	windowmodelsRepository := windowmodels.ProvideWindowRepository(sqlDB)
-	windowmodelsService := windowmodels.ProvideWindowService(windowmodelsRepository)
-	windowmodelsHandler := windowmodels.ProvideWindowHandler(windowmodelsService, log)
 	fileService := providers.ProvideFileService()
+	windowmodelsService := windowmodels.ProvideWindowService(windowmodelsRepository, windowtypesRepository, materialsRepository, systemsRepository, fileService, log)
+	windowmodelsHandler := windowmodels.ProvideWindowHandler(windowmodelsService, log)
 	fileHandler := providers.ProvideFileHandler(fileService, log)
 	serverHTTP := api.NewServerHTTP(cfg, handler, userHandler, materialsHandler, systemsHandler, windowtypesHandler, windowmodelsHandler, fileHandler)
 	return serverHTTP, nil

@@ -38,6 +38,8 @@ func (s *Service) UploadImage(img []byte, t ImageType, filePath PathType) (strin
 
 	fileWithPath := fmt.Sprintf("./static%s/%s%s", filePath, fileName, t)
 
+	fmt.Println(op, fileWithPath)
+
 	if err := os.MkdirAll(filepath.Dir(fileWithPath), os.ModePerm); err != nil {
 		return "", fmt.Errorf("%s: %w", op, err)
 	}

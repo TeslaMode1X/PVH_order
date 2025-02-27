@@ -60,6 +60,24 @@ func (r *Repository) GetSystemByIdRepository(ctx context.Context, id string) (*s
 	return &systemObj, nil
 }
 
+func (r *Repository) GetSystemIdByNameRepository(ctx context.Context, name string) (string, error) {
+	const op = "repository.systems.GetSystemIdByNameRepository"
+
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT id FROM systems s WHERE name = $1")
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	var id string
+	err = stmt.QueryRowContext(ctx, name).Scan(&id)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return id, nil
+}
+
 func (r *Repository) CreateSystemRepository(ctx context.Context, materialId string, creation systems.ObjectCreation) error {
 	const op = "repository.systems.CreateSystemRepository"
 

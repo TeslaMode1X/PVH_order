@@ -43,10 +43,21 @@ func ProvideWindowHandler(svc interfaces.WindowModelService, log *slog.Logger) *
 	return hdl
 }
 
-func ProvideWindowService(repo interfaces.WindowModelRepository) *windowSvc.Service {
+func ProvideWindowService(
+	windowRepo interfaces.WindowModelRepository,
+	typeRepo interfaces.WindowTypesRepository,
+	materialRepo interfaces.MaterialRepository,
+	systemRepo interfaces.SystemsRepository,
+	fileService interfaces.FileService,
+	log *slog.Logger) *windowSvc.Service {
 	svcOnce.Do(func() {
 		svc = &windowSvc.Service{
-			Repo: repo,
+			WindowRepo:   windowRepo,
+			TypeRepo:     typeRepo,
+			MaterialRepo: materialRepo,
+			SystemRepo:   systemRepo,
+			FileSvc:      fileService,
+			Log:          log,
 		}
 	})
 

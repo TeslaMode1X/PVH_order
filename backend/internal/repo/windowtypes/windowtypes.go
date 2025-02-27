@@ -59,6 +59,24 @@ func (r *Repository) GetWindowTypeByIdRepository(ctx context.Context, id string)
 	return &window, nil
 }
 
+func (r *Repository) GetWindowTypeIdByNameRepository(ctx context.Context, name string) (string, error) {
+	const op = "repository.windowtypes.GetWindowTypeIdByNameRepository"
+
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT id FROM window_types where name = $1")
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	var id string
+	err = stmt.QueryRowContext(ctx, name).Scan(&id)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return id, nil
+}
+
 func (r *Repository) CreateWindowTypeRepository(ctx context.Context, creation windowtypes.ObjectCreation) error {
 	const op = "repository.windowtypes.CreateWindowTypeRepository"
 
