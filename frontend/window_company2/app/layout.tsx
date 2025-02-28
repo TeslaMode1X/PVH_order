@@ -7,9 +7,10 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ["latin", "cyrillic"] })
 
 export const metadata: Metadata = {
-  title: "ТОО МАСШТАБ-СТРОЙ СОЧИ - Производство и установка окон",
-  description: "Качественные ПВХ и алюминиевые окна в Сочи. Производство, продажа и установка.",
-  generator: 'v0.dev'
+  title: "ООО «МАСШТАБ-СТРОЙ СОЧИ» - Производство и установка окон",
+  description: "Производственная монтажная компания по изготовлению и установке металлопластиковых и алюминиевых конструкций, противопожарных конструкций, стеклянных ограждений, роллет и секционных ворот.",
+  generator: 'v0.dev',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1'
 }
 
 export default function RootLayout({
