@@ -28,6 +28,7 @@ func (h *Handler) NewWindowModelHandler(r chi.Router) {
 
 		r.Get("/{id}", h.GetWindowModelByID)
 		r.Put("/{id}", h.UpdateWindowModelCharacteristics)
+		r.Delete("/{id}", h.DeleteWindowModel)
 	})
 }
 
@@ -234,4 +235,24 @@ func (h *Handler) UpdateWindowModelCharacteristics(w http.ResponseWriter, r *htt
 	}
 
 	responseApi.WriteJson(w, r, http.StatusOK, map[string]interface{}{"Window model updated successfully": objectUpdate})
+}
+
+func (h *Handler) DeleteWindowModel(w http.ResponseWriter, r *http.Request) {
+	const op = "handler.windowmodels.DeleteWindowModel"
+
+	h.Log = h.Log.With(
+		slog.String("op", op),
+		slog.String("request_id", middleware.GetReqID(r.Context())),
+	)
+
+	id := chi.URLParam(r, "id")
+
+	err := h.Svc.DeleteWindowModelService(context.Background(), id)
+	if err != nil {
+		h.Log.Error("service failed to delete window model", slogError.Err(err))
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
+		return
+	}
+
+	responseApi.WriteJson(w, r, http.StatusOK, "window model deleted!")
 }

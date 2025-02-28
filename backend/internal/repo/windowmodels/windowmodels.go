@@ -232,3 +232,20 @@ func (r *Repository) UpdateWindowModelCharacteristicsRepository(ctx context.Cont
 
 	return nil
 }
+
+func (r *Repository) DeleteWindowModelRepository(ctx context.Context, id string) error {
+	const op = "repository.windowmodels.DeleteWindowModelRepository"
+
+	stmt, err := r.DB.PrepareContext(ctx, "DELETE FROM window_models WHERE id = $1")
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctx, id)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	return nil
+}

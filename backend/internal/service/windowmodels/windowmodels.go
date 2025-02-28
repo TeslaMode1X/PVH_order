@@ -181,3 +181,40 @@ func (s *Service) UpdateWindowModelCharacteristicsCheckerService(ctx context.Con
 
 	return nil
 }
+
+func (s *Service) DeleteWindowModelService(ctx context.Context, id string) error {
+	const op = "service.windowmodels.DeleteWindowModelService"
+
+	windowModel, err := s.WindowRepo.GetWindowModelByIDRepository(ctx, id)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	if windowModel.LargeImagePath != "" {
+		err = s.FileSvc.RemoveFile(windowModel.LargeImagePath)
+		if err != nil {
+			return fmt.Errorf("%s: %w", op, err)
+		}
+	}
+
+	if windowModel.MediumImagePath != "" {
+		err = s.FileSvc.RemoveFile(windowModel.MediumImagePath)
+		if err != nil {
+			return fmt.Errorf("%s: %w", op, err)
+		}
+	}
+
+	if windowModel.SmallImagePath != "" {
+		err = s.FileSvc.RemoveFile(windowModel.SmallImagePath)
+		if err != nil {
+			return fmt.Errorf("%s: %w", op, err)
+		}
+	}
+
+	err = s.WindowRepo.DeleteWindowModelRepository(ctx, id)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+
+	return nil
+}
