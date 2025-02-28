@@ -3,6 +3,7 @@ package windowmodels
 import (
 	"encoding/json"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
+	_ "github.com/TeslaMode1X/PVH_order/internal/domain/models/response"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/models/windowmodels"
 	"github.com/TeslaMode1X/PVH_order/internal/service/file"
 	responseApi "github.com/TeslaMode1X/PVH_order/internal/utils/response"
@@ -32,6 +33,16 @@ func (h *Handler) NewWindowModelHandler(r chi.Router) {
 	})
 }
 
+// GetAllWindowModels godoc
+//
+//	@Summary      Get all window models
+//	@Description  Retrieve all window models from the database
+//	@Tags         window-model
+//	@Accept       application/json
+//	@Produce      json
+//	@Success      200  {object}  map[string]interface{} "List of window models"
+//	@Failure      500  {object}  response.ErrorResponse "Internal Server Error"
+//	@Router       /window/model [get]
 func (h *Handler) GetAllWindowModels(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.windowmodels.GetAllWindowModels"
 
@@ -50,6 +61,17 @@ func (h *Handler) GetAllWindowModels(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, map[string]interface{}{"data": window})
 }
 
+// GetWindowModelByID godoc
+//
+//	@Summary      Get window model by ID
+//	@Description  Retrieve window model details from the database using its unique identifier
+//	@Tags         window-model
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id   path      string  true  "ID of the window model to retrieve"
+//	@Success      200  {object}  windowmodels.Object "Window model object"
+//	@Failure      500  {object}  response.ErrorResponse "Internal Server Error"
+//	@Router       /window/model/{id} [get]
 func (h *Handler) GetWindowModelByID(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.windowmodels.GetWindowModelByIDRepository"
 
@@ -70,6 +92,21 @@ func (h *Handler) GetWindowModelByID(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, window)
 }
 
+// CreateWindowModel godoc
+//
+//	@Summary      Create a new window model
+//	@Description  Create a new window model with images and characteristics
+//	@Tags         window-model
+//	@Accept       multipart/form-data
+//	@Produce      json
+//	@Param        large_image   formData  file    true  "Large image file (jpeg/png)"
+//	@Param        medium_image  formData  file    true  "Medium image file (jpeg/png)"
+//	@Param        small_image   formData  file    true  "Small image file (jpeg/png)"
+//	@Param        object_data   formData  string  true  "Window model data in JSON format"
+//	@Success      201  {object}  map[string]interface{} "Window model created successfully"
+//	@Failure      400  {object}  response.ErrorResponse "Bad Request"
+//	@Failure      500  {object}  response.ErrorResponse "Internal Server Error"
+//	@Router       /window/model [post]
 func (h *Handler) CreateWindowModel(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.windowmodels.CreateWindowModel"
 
@@ -194,6 +231,19 @@ func (h *Handler) CreateWindowModel(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusCreated, map[string]interface{}{"Window model created successfully": objectCreate})
 }
 
+// UpdateWindowModelCharacteristics godoc
+//
+//	@Summary      Update window model characteristics
+//	@Description  Update window model characteristics by ID
+//	@Tags         window-model
+//	@Accept       multipart/form-data
+//	@Produce      json
+//	@Param        id          path      string  true  "ID of the window model to update"
+//	@Param        object_data formData  string  true  "Updated window model characteristics in JSON format"
+//	@Success      200  {object}  map[string]interface{} "Window model updated successfully"
+//	@Failure      400  {object}  response.ErrorResponse "Bad Request"
+//	@Failure      500  {object}  response.ErrorResponse "Internal Server Error"
+//	@Router       /window/model/{id} [put]
 func (h *Handler) UpdateWindowModelCharacteristics(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.windowmodels.UpdateWindowModelCharacteristics"
 
@@ -237,6 +287,17 @@ func (h *Handler) UpdateWindowModelCharacteristics(w http.ResponseWriter, r *htt
 	responseApi.WriteJson(w, r, http.StatusOK, map[string]interface{}{"Window model updated successfully": objectUpdate})
 }
 
+// DeleteWindowModel godoc
+//
+//	@Summary      Delete a window model
+//	@Description  Remove a window model from the database using its unique identifier
+//	@Tags         window-model
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id   path      string  true  "ID of the window model to delete"
+//	@Success      200  {string}  string  "window model deleted!"
+//	@Failure      500  {object}  response.ErrorResponse "Internal Server Error"
+//	@Router       /window/model/{id} [delete]
 func (h *Handler) DeleteWindowModel(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.windowmodels.DeleteWindowModel"
 

@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
+	_ "github.com/TeslaMode1X/PVH_order/internal/domain/models/auth"
+	_ "github.com/TeslaMode1X/PVH_order/internal/domain/models/response"
 	"github.com/TeslaMode1X/PVH_order/internal/service"
 	responseApi "github.com/TeslaMode1X/PVH_order/internal/utils/response"
 	"github.com/TeslaMode1X/PVH_order/pkg/logger/slogError"
@@ -25,6 +27,18 @@ func (h *Handler) NewUserHandler(r chi.Router) {
 	})
 }
 
+// GetUserByID godoc
+//
+//	@Summary      Get user by ID
+//	@Description  Retrieve user details from the database using its unique identifier
+//	@Tags         user
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        userId path     string  true  "ID of the user to retrieve"
+//	@Success      200    {object} auth.User "Returns the user object"
+//	@Failure      404    {object} response.ErrorResponse "User not found"
+//	@Failure      400    {object} response.ErrorResponse "Bad Request"
+//	@Router       /user/{userId} [get]
 func (h *Handler) GetUserByID(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.user.GetUserByID"
 
