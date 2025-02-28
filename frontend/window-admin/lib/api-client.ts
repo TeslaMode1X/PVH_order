@@ -63,12 +63,6 @@ class ApiClient {
       ...options.headers,
     };
 
-    // Получаем токен из localStorage
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
       headers,
@@ -178,6 +172,11 @@ class ApiClient {
     return this.request(`/window/model/${id}`, {
       method: 'DELETE',
     });
+  }
+
+  // General purpose methods
+  async get<T>(endpoint: string) {
+    return this.request<T>(endpoint);
   }
 }
 
