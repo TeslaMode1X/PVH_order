@@ -6,6 +6,7 @@ services:
     image: postgres:17
     env_file:
       - .env.local
+#    Чтобы к бд нельзя было подключиться извне
 #    expose:
 #      - "5432"
     #    Testing purposes(to open db in console)
