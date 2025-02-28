@@ -2,6 +2,7 @@ package systems
 
 import (
 	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
+	_ "github.com/TeslaMode1X/PVH_order/internal/domain/models/response"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/models/systems"
 	responseApi "github.com/TeslaMode1X/PVH_order/internal/utils/response"
 	"github.com/TeslaMode1X/PVH_order/pkg/jsonReader"
@@ -30,6 +31,16 @@ func (h *Handler) NewSystemsHandler(r chi.Router) {
 	})
 }
 
+// GetAllSystems godoc
+//
+//	@Summary      Get all systems
+//	@Description  Retrieve a list of all systems from the database
+//	@Tags         systems
+//	@Accept       application/json
+//	@Produce      json
+//	@Success      200  {array}    systems.Object "List of all systems"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /systems [get]
 func (h *Handler) GetAllSystems(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.systems.GetAllSystems"
 
@@ -48,6 +59,17 @@ func (h *Handler) GetAllSystems(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, systemsObj)
 }
 
+// GetSystemById godoc
+//
+//	@Summary      Get system by ID
+//	@Description  Retrieve a specific system by its unique identifier
+//	@Tags         systems
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id    path      string    true   "ID of the system to retrieve"
+//	@Success      200  {object}   systems.Object "System details"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /systems/{id} [get]
 func (h *Handler) GetSystemById(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.systems.GetSystemById"
 
@@ -68,6 +90,18 @@ func (h *Handler) GetSystemById(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, system)
 }
 
+// CreateSystem godoc
+//
+//	@Summary      Create a new system
+//	@Description  Add a new system to the database with the provided details
+//	@Tags         systems
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        system  body      systems.ObjectCreation  true   "System details"
+//	@Success      201  {object}   map[string]interface{} "System created successfully"
+//	@Failure      400  {object}   response.ErrorResponse "Bad request - invalid input"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /systems [post]
 func (h *Handler) CreateSystem(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.systems.CreateSystem"
 
@@ -94,6 +128,19 @@ func (h *Handler) CreateSystem(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// UpdateSystemById godoc
+//
+//	@Summary      Update system
+//	@Description  Update an existing system's information by ID
+//	@Tags         systems
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id       path      string                 true   "ID of the system to update"
+//	@Param        system   body      systems.ObjectCreation true   "Updated system details"
+//	@Success      200  {object}   map[string]interface{} "System updated successfully"
+//	@Failure      400  {object}   response.ErrorResponse "Bad request - invalid input"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /systems/{id} [put]
 func (h *Handler) UpdateSystemById(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.systems.UpdateSystemById"
 
@@ -121,6 +168,17 @@ func (h *Handler) UpdateSystemById(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, map[string]interface{}{"system updated!": systemCurrent})
 }
 
+// DeleteSystemById godoc
+//
+//	@Summary      Delete a system
+//	@Description  Remove a system from the database using its unique identifier
+//	@Tags         systems
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id    path      string    true   "ID of the system to delete"
+//	@Success      200  {object}   map[string]interface{} "System deleted successfully"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /systems/{id} [delete]
 func (h *Handler) DeleteSystemById(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.systems.DeleteSystemByIdService"
 

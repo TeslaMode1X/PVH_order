@@ -3,6 +3,7 @@ package materials
 import (
 	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/models/materials"
+	_ "github.com/TeslaMode1X/PVH_order/internal/domain/models/response"
 	responseApi "github.com/TeslaMode1X/PVH_order/internal/utils/response"
 	"github.com/TeslaMode1X/PVH_order/pkg/jsonReader"
 	"github.com/TeslaMode1X/PVH_order/pkg/logger/slogError"
@@ -31,6 +32,16 @@ func (h *Handler) NewMaterialHandler(r chi.Router) {
 	})
 }
 
+// GetAllMaterials godoc
+//
+//	@Summary      Get all materials
+//	@Description  Retrieve a list of all materials from the system
+//	@Tags         materials
+//	@Accept       application/json
+//	@Produce      json
+//	@Success      200  {array}    materials.Object "List of all materials"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /materials [get]
 func (h *Handler) GetAllMaterials(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.materials.GetAllMaterials"
 
@@ -49,6 +60,17 @@ func (h *Handler) GetAllMaterials(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, materials)
 }
 
+// GetMaterialById godoc
+//
+//	@Summary      Get material by ID
+//	@Description  Retrieve a specific material by its unique identifier
+//	@Tags         materials
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id    path      string    true   "ID of the material to retrieve"
+//	@Success      200  {object}   materials.Object "Material details"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /materials/{id} [get]
 func (h *Handler) GetMaterialById(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.materials.GetMaterialById"
 
@@ -69,6 +91,18 @@ func (h *Handler) GetMaterialById(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, materialsObj)
 }
 
+// CreateMaterial godoc
+//
+//	@Summary      Create a new material
+//	@Description  Add a new material to the system with the provided details
+//	@Tags         materials
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        material  body      materials.Create  true   "Material details"
+//	@Success      201  {string}   string "Material created successfully"
+//	@Failure      400  {object}   response.ErrorResponse "Bad request - invalid input"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /materials [post]
 func (h *Handler) CreateMaterial(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.materials.CreateMaterial"
 
@@ -93,6 +127,19 @@ func (h *Handler) CreateMaterial(w http.ResponseWriter, r *http.Request) {
 
 	responseApi.WriteJson(w, r, http.StatusCreated, "material created")
 }
+
+// UpdateMaterialById godoc
+//
+//  @Summary      Update material
+//  @Description  Update an existing material's information
+//  @Tags         materials
+//  @Accept       application/json
+//  @Produce      json
+//  @Param        material  body      materials.Object  true   "Updated material details"
+//  @Success      200  {object}   map[string]interface{} "Material updated successfully"
+//  @Failure      400  {object}   response.ErrorResponse "Bad request - invalid input"
+//  @Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//  @Router       /materials [put]
 
 func (h *Handler) UpdateMaterialById(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.materials.UpdateMaterialById"
@@ -119,6 +166,17 @@ func (h *Handler) UpdateMaterialById(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, map[string]interface{}{"material updated": materialCurrent})
 }
 
+// DeleteMaterialById godoc
+//
+//	@Summary      Delete a material
+//	@Description  Remove a material from the system using its unique identifier
+//	@Tags         materials
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        id    path      string    true   "ID of the material to delete"
+//	@Success      200  {string}   string "Material deleted successfully"
+//	@Failure      500  {object}   response.ErrorResponse "Internal Server Error"
+//	@Router       /materials/{id} [delete]
 func (h *Handler) DeleteMaterialById(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.materials.DeleteMaterialById"
 

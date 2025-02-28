@@ -1,0 +1,869 @@
+definitions:
+  ApplicationCreation:
+    properties:
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  ApplicationRead:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  ErrorResponseModel:
+    properties:
+      error:
+        type: string
+    type: object
+  LoginModel:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  MaterialCreate:
+    properties:
+      name:
+        type: string
+    type: object
+  MaterialObject:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  RegistrationModel:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  SystemsReadObject:
+    properties:
+      id:
+        type: string
+      material_name:
+        type: string
+      name:
+        type: string
+    type: object
+  SystemsWriteObject:
+    properties:
+      material_name:
+        type: string
+      name:
+        type: string
+    type: object
+  UserModel:
+    properties:
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+    type: object
+  WindowModelCharacteristics:
+    properties:
+      chambers:
+        type: string
+      executions:
+        items:
+          type: string
+        type: array
+      falz_height:
+        type: integer
+      frame_sash_height:
+        type: integer
+      glass_type:
+        type: string
+      profile:
+        type: string
+      seal_colors:
+        items:
+          type: string
+        type: array
+      seal_material:
+        items:
+          type: string
+        type: array
+      thermal_resistance:
+        type: number
+      width:
+        type: integer
+    type: object
+  WindowModelReadObject:
+    properties:
+      characteristics:
+        $ref: '#/definitions/WindowModelCharacteristics'
+      id:
+        type: string
+      large_image_path:
+        type: string
+      material_id:
+        description: Эти поля останутся для других операций
+        type: string
+      material_name:
+        description: Новые поля для хранения имен
+        type: string
+      medium_image_path:
+        type: string
+      name:
+        type: string
+      small_image_path:
+        type: string
+      system_id:
+        description: Эти поля останутся для других операций
+        type: string
+      system_name:
+        description: Новые поля для хранения имен
+        type: string
+      type_id:
+        description: Эти поля останутся для других операций
+        type: string
+      type_name:
+        description: Новые поля для хранения имен
+        type: string
+    type: object
+  WindowTypesCreate:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  WindowTypesRead:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /application:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all applications from the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all applications
+          schema:
+            items:
+              $ref: '#/definitions/ApplicationRead'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get all applications
+      tags:
+      - application
+    post:
+      consumes:
+      - application/json
+      description: Add a new application to the system with the provided details
+      parameters:
+      - description: Application details
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/ApplicationCreation'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Application created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Create a new application
+      tags:
+      - application
+  /application/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove an application from the system using its unique identifier
+      parameters:
+      - description: ID of the application to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Application deleted successfully
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Delete an application
+      tags:
+      - application
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific application by its unique identifier
+      parameters:
+      - description: ID of the application to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Application details
+          schema:
+            $ref: '#/definitions/ApplicationRead'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get application by ID
+      tags:
+      - application
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and return a JWT token as a cookie
+      parameters:
+      - description: User login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/LoginModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User ID
+          schema:
+            type: string
+        "401":
+          description: Already logged in
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: User login
+      tags:
+      - auth
+  /auth/registration:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user in the system
+      parameters:
+      - description: User registration details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/RegistrationModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User ID
+          schema:
+            type: string
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "409":
+          description: User already exists
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: User registration
+      tags:
+      - auth
+  /materials:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all materials from the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all materials
+          schema:
+            items:
+              $ref: '#/definitions/MaterialObject'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get all materials
+      tags:
+      - materials
+    post:
+      consumes:
+      - application/json
+      description: Add a new material to the system with the provided details
+      parameters:
+      - description: Material details
+        in: body
+        name: material
+        required: true
+        schema:
+          $ref: '#/definitions/MaterialCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Material created successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request - invalid input
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Create a new material
+      tags:
+      - materials
+  /materials/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a material from the system using its unique identifier
+      parameters:
+      - description: ID of the material to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Material deleted successfully
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Delete a material
+      tags:
+      - materials
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific material by its unique identifier
+      parameters:
+      - description: ID of the material to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Material details
+          schema:
+            $ref: '#/definitions/MaterialObject'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get material by ID
+      tags:
+      - materials
+  /systems:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all systems from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of all systems
+          schema:
+            items:
+              $ref: '#/definitions/SystemsReadObject'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get all systems
+      tags:
+      - systems
+    post:
+      consumes:
+      - application/json
+      description: Add a new system to the database with the provided details
+      parameters:
+      - description: System details
+        in: body
+        name: system
+        required: true
+        schema:
+          $ref: '#/definitions/SystemsWriteObject'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: System created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request - invalid input
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Create a new system
+      tags:
+      - systems
+  /systems/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a system from the database using its unique identifier
+      parameters:
+      - description: ID of the system to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: System deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Delete a system
+      tags:
+      - systems
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific system by its unique identifier
+      parameters:
+      - description: ID of the system to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: System details
+          schema:
+            $ref: '#/definitions/SystemsReadObject'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get system by ID
+      tags:
+      - systems
+    put:
+      consumes:
+      - application/json
+      description: Update an existing system's information by ID
+      parameters:
+      - description: ID of the system to update
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated system details
+        in: body
+        name: system
+        required: true
+        schema:
+          $ref: '#/definitions/SystemsWriteObject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: System updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request - invalid input
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Update system
+      tags:
+      - systems
+  /user/{userId}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve user details from the database using its unique identifier
+      parameters:
+      - description: ID of the user to retrieve
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns the user object
+          schema:
+            $ref: '#/definitions/UserModel'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get user by ID
+      tags:
+      - user
+  /window:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all window types from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of window types
+          schema:
+            items:
+              $ref: '#/definitions/WindowTypesRead'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get all window types
+      tags:
+      - window
+    post:
+      consumes:
+      - application/json
+      description: Create a new window type with the provided data
+      parameters:
+      - description: Window type data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/WindowTypesCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Object created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Create a new window type
+      tags:
+      - window
+  /window/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a window type from the database using its unique identifier
+      parameters:
+      - description: ID of the window type to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Window type deleted successfully
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Delete a window type
+      tags:
+      - window
+    get:
+      consumes:
+      - application/json
+      description: Retrieve window type details from the database using its unique
+        identifier
+      parameters:
+      - description: ID of the window type to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Window type object
+          schema:
+            $ref: '#/definitions/WindowTypesRead'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get window type by ID
+      tags:
+      - window
+    put:
+      consumes:
+      - application/json
+      description: Update window type data by ID
+      parameters:
+      - description: ID of the window type to update
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated window type data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/WindowTypesCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Object updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Update window type
+      tags:
+      - window
+  /window/model:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all window models from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of window models
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get all window models
+      tags:
+      - window-model
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new window model with images and characteristics
+      parameters:
+      - description: Large image file (jpeg/png)
+        in: formData
+        name: large_image
+        required: true
+        type: file
+      - description: Medium image file (jpeg/png)
+        in: formData
+        name: medium_image
+        required: true
+        type: file
+      - description: Small image file (jpeg/png)
+        in: formData
+        name: small_image
+        required: true
+        type: file
+      - description: Window model data in JSON format
+        in: formData
+        name: object_data
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Window model created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Create a new window model
+      tags:
+      - window-model
+  /window/model/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a window model from the database using its unique identifier
+      parameters:
+      - description: ID of the window model to delete
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: window model deleted!
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Delete a window model
+      tags:
+      - window-model
+    get:
+      consumes:
+      - application/json
+      description: Retrieve window model details from the database using its unique
+        identifier
+      parameters:
+      - description: ID of the window model to retrieve
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Window model object
+          schema:
+            $ref: '#/definitions/WindowModelReadObject'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Get window model by ID
+      tags:
+      - window-model
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update window model characteristics by ID
+      parameters:
+      - description: ID of the window model to update
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated window model characteristics in JSON format
+        in: formData
+        name: object_data
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Window model updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponseModel'
+      summary: Update window model characteristics
+      tags:
+      - window-model
+swagger: "2.0"

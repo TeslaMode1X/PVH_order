@@ -20,9 +20,9 @@ func (r *Repository) GetAllWindowModelsRepository(ctx context.Context) ([]*windo
 
 	query := `
 		SELECT wm.id, wm.name, 
-			   wt.id as type_id,     -- Изменено с wt.name на wt.id
-			   m.id as material_id,  -- Изменено с m.name на m.id
-			   s.id as system_id,    -- Изменено с s.name на s.id
+			   wt.id as type_id,     
+			   m.id as material_id,  
+			   s.id as system_id,    
 			   wm.image_large,
 			   wm.image_medium,
 			   wm.image_small,
@@ -79,9 +79,9 @@ func (r *Repository) GetWindowModelByIDRepository(ctx context.Context, id string
 
 	query := `
 		SELECT wm.id, wm.name, 
-			   wt.id as type_id,     -- Изменено с wt.name на wt.id
-			   m.id as material_id,  -- Изменено с m.name на m.id
-			   s.id as system_id,    -- Изменено с s.name на s.id
+			   wt.id as type_id,     
+			   m.id as material_id, 
+			   s.id as system_id,   
 			   wm.image_large,
 			   wm.image_medium,
 			   wm.image_small,
@@ -180,6 +180,71 @@ func (r *Repository) CreateWindowModelRepository(ctx context.Context, largeImage
 
 	if err != nil {
 		return fmt.Errorf("%s: failed to execute query: %w", op, err)
+	}
+
+	return nil
+}
+
+func (r *Repository) UpdateWindowModelCharacteristicsRepository(ctx context.Context, id string, characteristics windowmodels.CharacteristicsUpdate) error {
+	const op = "repository.windowmodels.UpdateWindowModelCharacteristicsRepository"
+
+	characteristicsData := windowmodels.Characteristics{
+		Profile:           characteristics.Profile,
+		Executions:        characteristics.Executions,
+		SealColors:        characteristics.SealColors,
+		SealMaterial:      characteristics.SealMaterial,
+		Chambers:          characteristics.Chambers,
+		GlassType:         characteristics.GlassType,
+		Width:             characteristics.Width,
+		ThermalResistance: characteristics.ThermalResistance,
+		FalzHeight:        characteristics.FalzHeight,
+		FrameSashHeight:   characteristics.FrameSashHeight,
+	}
+
+	characteristicsJSON, err := json.Marshal(characteristicsData)
+	if err != nil {
+		return fmt.Errorf("%s: failed to marshal characteristics to JSON: %w", op, err)
+	}
+
+	query := `
+		UPDATE window_models 
+		SET 
+			name = COALESCE(NULLIF($1, ''), name),
+			type_id = COALESCE(NULLIF($2::UUID, NULL), type_id),
+			material_id = COALESCE(NULLIF($3::UUID, NULL), material_id),
+			system_id = COALESCE(NULLIF($4::UUID, NULL), system_id),
+			characteristics = $5,
+			updated_at = CURRENT_TIMESTAMP
+		WHERE id = $6::UUID;
+	`
+
+	_, err = r.DB.ExecContext(ctx, query,
+		characteristics.Name,
+		characteristics.TypeID,
+		characteristics.MaterialID,
+		characteristics.SystemID,
+		characteristicsJSON,
+		id,
+	)
+	if err != nil {
+		return fmt.Errorf("%s: failed to update window model characteristics: %w", op, err)
+	}
+
+	return nil
+}
+
+func (r *Repository) DeleteWindowModelRepository(ctx context.Context, id string) error {
+	const op = "repository.windowmodels.DeleteWindowModelRepository"
+
+	stmt, err := r.DB.PrepareContext(ctx, "DELETE FROM window_models WHERE id = $1")
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctx, id)
+	if err != nil {
+		return fmt.Errorf("%s: %w", op, err)
 	}
 
 	return nil

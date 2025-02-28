@@ -10,6 +10,7 @@ import (
 	"github.com/TeslaMode1X/PVH_order/internal/api"
 	"github.com/TeslaMode1X/PVH_order/internal/config"
 	"github.com/TeslaMode1X/PVH_order/internal/db"
+	auth2 "github.com/TeslaMode1X/PVH_order/internal/domain/providers/application"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/auth"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/file"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/providers/materials"
@@ -47,6 +48,9 @@ func InitializeAPI(cfg *config.Config, log *slog.Logger) (*api.ServerHTTP, error
 	windowmodelsService := windowmodels.ProvideWindowService(windowmodelsRepository, windowtypesRepository, materialsRepository, systemsRepository, fileService, log)
 	windowmodelsHandler := windowmodels.ProvideWindowHandler(windowmodelsService, log)
 	fileHandler := providers.ProvideFileHandler(fileService, log)
-	serverHTTP := api.NewServerHTTP(cfg, handler, userHandler, materialsHandler, systemsHandler, windowtypesHandler, windowmodelsHandler, fileHandler)
+	applicationRepository := auth2.ProvideApplicationRepository(sqlDB)
+	applicationService := auth2.ProvideApplicatonService(applicationRepository)
+	applicationHandler := auth2.ProvideApplicationHandler(applicationService, log)
+	serverHTTP := api.NewServerHTTP(cfg, handler, userHandler, materialsHandler, systemsHandler, windowtypesHandler, windowmodelsHandler, fileHandler, applicationHandler)
 	return serverHTTP, nil
 }

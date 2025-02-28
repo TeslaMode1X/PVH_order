@@ -2,6 +2,8 @@ package api
 
 import (
 	"fmt"
+	_ "github.com/TeslaMode1X/PVH_order/docs"
+	applHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/application"
 	authHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/auth"
 	fileHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/file"
 	materialHdl "github.com/TeslaMode1X/PVH_order/internal/api/handler/materials"
@@ -13,6 +15,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/cors"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"log/slog"
 	"net/http"
 	"time"
@@ -28,7 +31,8 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 	systemHandler *systemsHdl.Handler,
 	windowHandler *windowHdl.Handler,
 	windowModelHandler *windowMdlHdl.Handler,
-	fileHandler *fileHdl.Handler) *ServerHTTP {
+	fileHandler *fileHdl.Handler,
+	applHandler *applHdl.Handler) *ServerHTTP {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -44,6 +48,9 @@ func NewServerHTTP(cfg *config.Config, authHandler *authHdl.Handler,
 		windowHandler.NewWindowTypesHandler(r)
 		windowModelHandler.NewWindowModelHandler(r)
 		fileHandler.NewFileHandler(r)
+		applHandler.NewApplicationHandler(r)
+
+		r.Get("/swagger/*", httpSwagger.Handler())
 	})
 
 	handler := cors.AllowAll().Handler(r)

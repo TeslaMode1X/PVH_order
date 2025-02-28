@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/interfaces"
 	"github.com/TeslaMode1X/PVH_order/internal/domain/models/auth"
+	_ "github.com/TeslaMode1X/PVH_order/internal/domain/models/response"
 	mw "github.com/TeslaMode1X/PVH_order/internal/middleware"
 	"github.com/TeslaMode1X/PVH_order/internal/service"
 	responseApi "github.com/TeslaMode1X/PVH_order/internal/utils/response"
@@ -40,6 +41,19 @@ func (h *Handler) NewAuthHandler(r chi.Router) {
 	})
 }
 
+// Login godoc
+//
+//	@Summary      User login
+//	@Description  Authenticate a user and return a JWT token as a cookie
+//	@Tags         auth
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        credentials  body      auth.Login  true  "User login credentials"
+//	@Success      200  {string}   string  "User ID"
+//	@Failure      401  {object}   response.ErrorResponse  "Already logged in"
+//	@Failure      404  {object}   response.ErrorResponse  "User not found"
+//	@Failure      500  {object}   response.ErrorResponse  "Internal Server Error"
+//	@Router       /auth/login [post]
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.auth.Login"
 
@@ -96,6 +110,19 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	responseApi.WriteJson(w, r, http.StatusOK, userID)
 }
 
+// Registration godoc
+//
+//	@Summary      User registration
+//	@Description  Register a new user in the system
+//	@Tags         auth
+//	@Accept       application/json
+//	@Produce      json
+//	@Param        user  body      auth.Registration  true  "User registration details"
+//	@Success      200  {string}   string  "User ID"
+//	@Failure      409  {object}   response.ErrorResponse  "User already exists"
+//	@Failure      404  {object}   response.ErrorResponse  "User not found"
+//	@Failure      500  {object}   response.ErrorResponse  "Internal Server Error"
+//	@Router       /auth/registration [post]
 func (h *Handler) Registration(w http.ResponseWriter, r *http.Request) {
 	const op = "handler.auth.Registration"
 
