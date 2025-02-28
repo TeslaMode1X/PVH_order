@@ -8,6 +8,7 @@ import (
 	"github.com/gofrs/uuid"
 	"log"
 	"os"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -38,6 +39,16 @@ type WindowModel struct {
 	Characteristics json.RawMessage `json:"characteristics"`
 }
 
+type User struct {
+	ID        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	Role      int       `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
 func main() {
 	dbPath, err := getDbPath()
 	if err != nil {
@@ -54,6 +65,7 @@ func main() {
 	loadMaterials(db)
 	loadSystems(db)
 	loadWindowModels(db)
+	loadUsers(db)
 
 	fmt.Println("Data has been successfully inserted into the database!")
 }
@@ -148,6 +160,35 @@ func loadWindowModels(db *sql.DB) {
 
 	for _, wm := range models {
 		_, err := stmt.Exec(wm.ID, wm.Name, wm.TypeID, wm.MaterialID, wm.SystemID, wm.Characteristics)
+		if err != nil {
+			log.Fatal(fmt.Errorf("error inserting row: %v", err))
+		}
+	}
+}
+
+func loadUsers(db *sql.DB) {
+	content, err := os.ReadFile("./json_migrations/users.json")
+	if err != nil {
+		log.Fatal(fmt.Errorf("error reading users.json: %v", err))
+	}
+
+	var users []User
+	if err := json.Unmarshal(content, &users); err != nil {
+		log.Fatal(fmt.Errorf("error parsing JSON: %v", err))
+	}
+
+	stmt, err := db.Prepare(`
+        INSERT INTO users (id, username, email, password, role, created_at, updated_at) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) 
+        ON CONFLICT (id) DO NOTHING
+    `)
+	if err != nil {
+		log.Fatal(fmt.Errorf("error preparing statement: %v", err))
+	}
+	defer stmt.Close()
+
+	for _, u := range users {
+		_, err := stmt.Exec(u.ID, u.Username, u.Email, u.Password, u.Role, u.CreatedAt, u.UpdatedAt)
 		if err != nil {
 			log.Fatal(fmt.Errorf("error inserting row: %v", err))
 		}

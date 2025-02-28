@@ -75,3 +75,21 @@ func (r *Repository) UserRegistration(ctx context.Context, registration auth.Reg
 
 	return id.String(), nil
 }
+
+func (r *Repository) UserRole(ctx context.Context, id string) (string, error) {
+	const op = "repo.auth.UserRole"
+
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT role FROM users WHERE id = $1")
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+	defer stmt.Close()
+
+	var role string
+	err = stmt.QueryRowContext(ctx, id).Scan(&role)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return role, nil
+}

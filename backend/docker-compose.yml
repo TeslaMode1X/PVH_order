@@ -9,7 +9,7 @@ services:
 #    Чтобы к бд нельзя было подключиться извне
 #    expose:
 #      - "5432"
-    #    Testing purposes(to open db in console)
+#    Testing purposes(to open db in console)
     ports:
       - ${POSTGRES_PORT}:5432
     healthcheck:

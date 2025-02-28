@@ -61,3 +61,14 @@ func (s *Service) RegistrationService(ctx context.Context, registration auth.Reg
 
 	return userID, nil
 }
+
+func (s *Service) UserRoleService(ctx context.Context, id string) (string, error) {
+	const op = "auth.service.UserRoleService"
+
+	roleId, err := s.AuthRepo.UserRole(ctx, id)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", op, err)
+	}
+
+	return roleId, nil
+}

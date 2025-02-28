@@ -88,9 +88,17 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	roleId, err := h.Svc.UserRoleService(context.Background(), userID)
+	if err != nil {
+		h.Log.Error("failed to get user role id", "error", err.Error())
+		responseApi.WriteError(w, r, http.StatusInternalServerError, slogError.Err(err))
+		return
+	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp":     time.Now().Add(time.Hour * 1).Unix(), // token expires in 1 hour
 		"user_id": userID,
+		"role_id": roleId,
 	})
 
 	tokenString, err := token.SignedString([]byte("your-secret-key"))
