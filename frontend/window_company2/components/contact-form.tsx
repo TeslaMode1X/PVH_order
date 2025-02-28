@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -39,7 +39,6 @@ export function ContactForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Свяжитесь с нами</CardTitle>
         <CardDescription>Оставьте свои контактные данные, и мы свяжемся с вами в ближайшее время</CardDescription>
       </CardHeader>
       <CardContent>
@@ -68,4 +67,3 @@ export function ContactForm() {
     </Card>
   )
 }
-
