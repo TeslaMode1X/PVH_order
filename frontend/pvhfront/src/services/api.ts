@@ -134,6 +134,13 @@ export const productsService = {
     });
   },
 
+  async updateMaterial(id: string, materialData: any) {
+    return fetchWithAuth(`/materials/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(materialData),
+    });
+  },
+
   async deleteMaterial(id: string) {
     return fetchWithAuth(`/materials/${id}`, {
       method: "DELETE",
@@ -174,8 +181,8 @@ export const productsService = {
 export const applicationsService = {
   async getApplications(filters?: any) {
     const queryParams = filters
-      ? `?${new URLSearchParams(filters).toString()}`
-      : "";
+        ? `?${new URLSearchParams(filters).toString()}`
+        : "";
     return fetchWithAuth(`/application${queryParams}`);
   },
 

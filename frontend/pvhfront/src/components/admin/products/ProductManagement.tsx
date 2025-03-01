@@ -121,7 +121,7 @@ const ProductManagement = () => {
 
   // Используем хук для работы с продуктами
   const { createProduct, updateProduct, deleteProduct } = useProducts(
-    activeTab as "windows" | "materials" | "systems",
+      activeTab as "windows" | "materials" | "systems",
   );
 
   // Handle form submission
@@ -183,91 +183,91 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gray-50 p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Product Management</h1>
-        <Button onClick={() => setShowForm(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Add New Product
-        </Button>
-      </div>
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-8">
-          <TabsTrigger value="windows">Windows</TabsTrigger>
-          <TabsTrigger value="materials">Materials</TabsTrigger>
-          <TabsTrigger value="systems">Systems</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="windows">
-          <ProductList
-            products={windowsData}
-            onEdit={handleEditProduct}
-            onDelete={handleDeleteProduct}
-            title="Windows"
-          />
-        </TabsContent>
-
-        <TabsContent value="materials">
-          <ProductList
-            products={materialsData}
-            onEdit={handleEditProduct}
-            onDelete={handleDeleteProduct}
-            title="Materials"
-          />
-        </TabsContent>
-
-        <TabsContent value="systems">
-          <ProductList
-            products={systemsData}
-            onEdit={handleEditProduct}
-            onDelete={handleDeleteProduct}
-            title="Systems"
-          />
-        </TabsContent>
-      </Tabs>
-
-      {/* Product Form Dialog */}
-      {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="max-h-[90vh] overflow-y-auto">
-            <ProductForm
-              initialData={
-                editingProduct
-                  ? {
-                      name: editingProduct.name,
-                      description: editingProduct.description,
-                      price: "0.00", // Assuming price is not in the Product interface
-                      category: editingProduct.category,
-                      status: editingProduct.status,
-                      sku: "", // Assuming SKU is not in the Product interface
-                    }
-                  : undefined
-              }
-              productType={getProductType()}
-              onSubmit={handleFormSubmit}
-              onCancel={() => {
-                setShowForm(false);
-                setEditingProduct(null);
-              }}
-            />
-          </div>
+      <div className="w-full h-full bg-gray-50 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Product Management</h1>
+          <Button onClick={() => setShowForm(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Add New Product
+          </Button>
         </div>
-      )}
 
-      {/* Delete Confirmation Dialog */}
-      {showDeleteDialog && productToDelete && (
-        <DeleteConfirmation
-          isOpen={showDeleteDialog}
-          itemName={productToDelete.name}
-          itemType={getProductType()}
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => {
-            setShowDeleteDialog(false);
-            setProductToDelete(null);
-          }}
-        />
-      )}
-    </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsTrigger value="windows">Windows</TabsTrigger>
+            <TabsTrigger value="materials">Materials</TabsTrigger>
+            <TabsTrigger value="systems">Systems</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="windows">
+            <ProductList
+                products={windowsData}
+                onEdit={handleEditProduct}
+                onDelete={handleDeleteProduct}
+                title="Windows"
+            />
+          </TabsContent>
+
+          <TabsContent value="materials">
+            <ProductList
+                products={materialsData}
+                onEdit={handleEditProduct}
+                onDelete={handleDeleteProduct}
+                title="Materials"
+            />
+          </TabsContent>
+
+          <TabsContent value="systems">
+            <ProductList
+                products={systemsData}
+                onEdit={handleEditProduct}
+                onDelete={handleDeleteProduct}
+                title="Systems"
+            />
+          </TabsContent>
+        </Tabs>
+
+        {/* Product Form Dialog */}
+        {showForm && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="max-h-[90vh] overflow-y-auto">
+                <ProductForm
+                    initialData={
+                      editingProduct
+                          ? {
+                            name: editingProduct.name,
+                            description: editingProduct.description,
+                            price: "0.00", // Assuming price is not in the Product interface
+                            category: editingProduct.category,
+                            status: editingProduct.status,
+                            sku: "", // Assuming SKU is not in the Product interface
+                          }
+                          : undefined
+                    }
+                    productType={getProductType()}
+                    onSubmit={handleFormSubmit}
+                    onCancel={() => {
+                      setShowForm(false);
+                      setEditingProduct(null);
+                    }}
+                />
+              </div>
+            </div>
+        )}
+
+        {/* Delete Confirmation Dialog */}
+        {showDeleteDialog && productToDelete && (
+            <DeleteConfirmation
+                isOpen={showDeleteDialog}
+                itemName={productToDelete.name}
+                itemType={getProductType()}
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => {
+                  setShowDeleteDialog(false);
+                  setProductToDelete(null);
+                }}
+            />
+        )}
+      </div>
   );
 };
 
