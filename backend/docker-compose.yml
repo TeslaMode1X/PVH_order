@@ -76,16 +76,16 @@ services:
     networks:
       - app-network
 
-  frontend-admin:
-    container_name: pvh_frontend_admin
-    restart: always
-    build:
-      context: ../frontend/window-admin
-      dockerfile: Dockerfile
-    expose:
-      - "3030"
-    networks:
-      - app-network
+#  frontend-admin:
+#    container_name: pvh_frontend_admin
+#    restart: always
+#    build:
+#      context: ../frontend/window-admin
+#      dockerfile: Dockerfile
+#    expose:
+#      - "3030"
+#    networks:
+#      - app-network
 
   nginx:
     image: nginx:latest
@@ -99,7 +99,7 @@ services:
     depends_on:
       - server
       - frontend
-      - frontend-admin
+#      - frontend-admin
     networks:
       - app-network
 

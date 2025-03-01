@@ -30,3 +30,25 @@ ENV PORT=3030
 
 # И измените CMD на
 CMD ["npm", "run", "start", "--", "-p", "3030"]
+
+
+# Docker compose
+#    location /admin {
+#            rewrite ^/admin(/?)(.*) /$2 break;
+#            proxy_pass http://frontend_admin;
+#
+#            proxy_set_header Host $host;
+#            proxy_set_header X-Real-IP $remote_addr;
+#            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#            proxy_set_header X-Forwarded-Proto $scheme;
+#
+#            proxy_connect_timeout 60;
+#            proxy_send_timeout 60;
+#            proxy_read_timeout 60;
+#        }
+#
+#        location /_next/ {
+#            proxy_pass http://frontend_admin;
+#            proxy_set_header Host $host;
+#            proxy_set_header X-Real-IP $remote_addr;
+#        }
