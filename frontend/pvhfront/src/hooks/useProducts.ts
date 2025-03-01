@@ -1,174 +1,218 @@
-import { useState, useEffect, useCallback } from "react";
-import { productsService } from "../services/api";
+// Базовый URL вашего API
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  status: string;
-  price?: string;
-  sku?: string;
-  createdAt: string;
-  updatedAt: string;
+// Вспомогательная функция для выполнения запросов
+async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
+  // Получаем токен из localStorage или другого хранилища
+  const token = localStorage.getItem("adminToken");
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...options.headers,
+  };
+
+  // Добавляем токен авторизации, если он есть
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  // Проверяем статус ответа
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({
+      message: "Произошла ошибка при выполнении запроса",
+    }));
+    throw new Error(error.message || `HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
 }
 
-interface UseProductsResult {
-  products: Product[];
-  isLoading: boolean;
-  error: string | null;
-  refreshProducts: () => Promise<void>;
-  createProduct: (productType: string, productData: any) => Promise<void>;
-  updateProduct: (
-    productType: string,
-    id: string,
-    productData: any,
-  ) => Promise<void>;
-  deleteProduct: (productType: string, id: string) => Promise<void>;
-}
+// Сервис для аутентификации
+export const authService = {
+  async login(email: string, password: string) {
+    const data = await fetchWithAuth("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
 
-export function useProducts(
-  productType: "windows" | "materials" | "systems",
-): UseProductsResult {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchProducts = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      let data;
-      switch (productType) {
-        case "windows":
-          data = await productsService.getWindows();
-          break;
-        case "materials":
-          data = await productsService.getMaterials();
-          break;
-        case "systems":
-          data = await productsService.getSystems();
-          break;
-      }
-
-      setProducts(data);
-    } catch (err) {
-      console.error(`Error fetching ${productType}:`, err);
-      setError(
-        err instanceof Error ? err.message : `Ошибка загрузки ${productType}`,
-      );
-    } finally {
-      setIsLoading(false);
+    // Сохраняем токен в localStorage
+    if (data.token) {
+      localStorage.setItem("adminToken", data.token);
     }
-  }, [productType]);
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    return data;
+  },
 
-  const createProduct = async (type: string, productData: any) => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  async logout() {
+    localStorage.removeItem("adminToken");
+    return { success: true };
+  },
 
-      let result;
-      switch (type) {
-        case "windows":
-          result = await productsService.createWindow(productData);
-          break;
-        case "materials":
-          result = await productsService.createMaterial(productData);
-          break;
-        case "systems":
-          result = await productsService.createSystem(productData);
-          break;
-        default:
-          throw new Error("Неизвестный тип продукта");
-      }
+  isAuthenticated() {
+    return !!localStorage.getItem("adminToken");
+  },
+};
 
-      await fetchProducts(); // Обновляем список после создания
-      return result;
-    } catch (err) {
-      console.error(`Error creating ${type}:`, err);
-      setError(err instanceof Error ? err.message : `Ошибка создания ${type}`);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+// Сервис для работы с продуктами
+export const productsService = {
+  // Окна
+  async getWindows() {
+    return fetchWithAuth("/window");
+  },
 
-  const updateProduct = async (type: string, id: string, productData: any) => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  async getWindow(id: string) {
+    return fetchWithAuth(`/window/${id}`);
+  },
 
-      let result;
-      switch (type) {
-        case "windows":
-          result = await productsService.updateWindow(id, productData);
-          break;
-        case "materials":
-          result = await productsService.updateMaterial(id, productData);
-          break;
-        case "systems":
-          result = await productsService.updateSystem(id, productData);
-          break;
-        default:
-          throw new Error("Неизвестный тип продукта");
-      }
+  async createWindow(windowData: any) {
+    return fetchWithAuth("/window", {
+      method: "POST",
+      body: JSON.stringify(windowData),
+    });
+  },
 
-      await fetchProducts(); // Обновляем список после обновления
-      return result;
-    } catch (err) {
-      console.error(`Error updating ${type}:`, err);
-      setError(
-        err instanceof Error ? err.message : `Ошибка обновления ${type}`,
-      );
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  async updateWindow(id: string, windowData: any) {
+    return fetchWithAuth(`/window/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(windowData),
+    });
+  },
 
-  const deleteProduct = async (type: string, id: string) => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  async deleteWindow(id: string) {
+    return fetchWithAuth(`/window/${id}`, {
+      method: "DELETE",
+    });
+  },
 
-      let result;
-      switch (type) {
-        case "windows":
-          result = await productsService.deleteWindow(id);
-          break;
-        case "materials":
-          result = await productsService.deleteMaterial(id);
-          break;
-        case "systems":
-          result = await productsService.deleteSystem(id);
-          break;
-        default:
-          throw new Error("Неизвестный тип продукта");
-      }
+  // Модели окон
+  async getWindowModels() {
+    return fetchWithAuth("/window/model");
+  },
 
-      await fetchProducts(); // Обновляем список после удаления
-      return result;
-    } catch (err) {
-      console.error(`Error deleting ${type}:`, err);
-      setError(err instanceof Error ? err.message : `Ошибка удаления ${type}`);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  async getWindowModel(id: string) {
+    return fetchWithAuth(`/window/model/${id}`);
+  },
 
-  return {
-    products,
-    isLoading,
-    error,
-    refreshProducts: fetchProducts,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-  };
-}
+  async createWindowModel(modelData: any) {
+    return fetchWithAuth("/window/model", {
+      method: "POST",
+      body: JSON.stringify(modelData),
+    });
+  },
+
+  async updateWindowModel(id: string, modelData: any) {
+    return fetchWithAuth(`/window/model/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(modelData),
+    });
+  },
+
+  async deleteWindowModel(id: string) {
+    return fetchWithAuth(`/window/model/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  // Материалы
+  async getMaterials() {
+    return fetchWithAuth("/materials");
+  },
+
+  async getMaterial(id: string) {
+    return fetchWithAuth(`/materials/${id}`);
+  },
+
+  async createMaterial(materialData: any) {
+    return fetchWithAuth("/materials", {
+      method: "POST",
+      body: JSON.stringify(materialData),
+    });
+  },
+
+  async updateMaterial(id: string, materialData: any) {
+    return fetchWithAuth(`/materials/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(materialData),
+    });
+  },
+
+  async deleteMaterial(id: string) {
+    return fetchWithAuth(`/materials/${id}`, {
+      method: "DELETE",
+    });
+  },
+
+  // Системы
+  async getSystems() {
+    return fetchWithAuth("/systems");
+  },
+
+  async getSystem(id: string) {
+    return fetchWithAuth(`/systems/${id}`);
+  },
+
+  async createSystem(systemData: any) {
+    return fetchWithAuth("/systems", {
+      method: "POST",
+      body: JSON.stringify(systemData),
+    });
+  },
+
+  async updateSystem(id: string, systemData: any) {
+    return fetchWithAuth(`/systems/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(systemData),
+    });
+  },
+
+  async deleteSystem(id: string) {
+    return fetchWithAuth(`/systems/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
+// Сервис для работы с заявками
+export const applicationsService = {
+  async getApplications(filters?: any) {
+    const queryParams = filters
+      ? `?${new URLSearchParams(filters).toString()}`
+      : "";
+    return fetchWithAuth(`/application${queryParams}`);
+  },
+
+  async getApplication(id: string) {
+    return fetchWithAuth(`/application/${id}`);
+  },
+
+  async createApplication(applicationData: any) {
+    return fetchWithAuth("/application", {
+      method: "POST",
+      body: JSON.stringify(applicationData),
+    });
+  },
+
+  async deleteApplication(id: string) {
+    return fetchWithAuth(`/application/${id}`, {
+      method: "DELETE",
+    });
+  },
+};
+
+// Сервис для получения статистики
+export const statisticsService = {
+  async getDashboardStats() {
+    // Заглушка для статистики, так как нет соответствующего API
+    return Promise.resolve({
+      totalUsers: 0,
+      totalRevenue: 0,
+      newOrders: 0,
+      activeProducts: 24,
+    });
+  },
+};
