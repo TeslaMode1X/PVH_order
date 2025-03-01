@@ -65,16 +65,16 @@ services:
     networks:
       - app-network
 
-  frontend:
-    container_name: pvh_frontend
-    restart: always
-    build:
-      context: ../frontend/window_company2
-      dockerfile: Dockerfile
-    expose:
-      - "3000"
-    networks:
-      - app-network
+#  frontend:
+#    container_name: pvh_frontend
+#    restart: always
+#    build:
+#      context: ../frontend/window_company2
+#      dockerfile: Dockerfile
+#    expose:
+#      - "3000"
+#    networks:
+#      - app-network
 
 #  frontend-admin:
 #    container_name: pvh_frontend_admin
@@ -98,11 +98,10 @@ services:
       - "80:80"
     depends_on:
       - server
-      - frontend
+#      - frontend
 #      - frontend-admin
     networks:
       - app-network
-
 
 networks:
   app-network:
@@ -111,3 +110,20 @@ networks:
 volumes:
   static:
 
+#
+#    location / {
+#    proxy_pass http://frontend;
+#
+#    proxy_set_header Host $host;
+#    proxy_set_header X-Real-IP $remote_addr;
+#    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    proxy_set_header X-Forwarded-Proto $scheme;
+#
+#    proxy_connect_timeout 60;
+#    proxy_send_timeout 60;
+#    proxy_read_timeout 60;
+#    }
+#
+#  upstream frontend {
+#  server pvh_frontend:3000;
+#}

@@ -16,7 +16,7 @@ type Repository struct {
 func (r *Repository) GetAllApplicationsRepository(ctx context.Context) ([]*application.Object, error) {
 	const op = "repository.application.GetAllApplicationsRepository"
 
-	stmt, err := r.DB.PrepareContext(ctx, "SELECT id, name, phone_number from applications")
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT id, name, phone_number, email, description from applications")
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
@@ -32,7 +32,7 @@ func (r *Repository) GetAllApplicationsRepository(ctx context.Context) ([]*appli
 	for rows.Next() {
 		var applicationObject application.Object
 
-		if err := rows.Scan(&applicationObject.ID, &applicationObject.Name, &applicationObject.PhoneNumber); err != nil {
+		if err := rows.Scan(&applicationObject.ID, &applicationObject.Name, &applicationObject.PhoneNumber, &applicationObject.Email, &applicationObject.Description); err != nil {
 			return nil, fmt.Errorf("%s: %w", op, err)
 		}
 		applications = append(applications, &applicationObject)
@@ -44,7 +44,7 @@ func (r *Repository) GetAllApplicationsRepository(ctx context.Context) ([]*appli
 func (r *Repository) GetApplicationByIdRepository(ctx context.Context, id string) (*application.Object, error) {
 	const op = "repository.application.GetApplicationByIdRepository"
 
-	stmt, err := r.DB.PrepareContext(ctx, "SELECT id, name, phone_number from applications where id = $1")
+	stmt, err := r.DB.PrepareContext(ctx, "SELECT id, name, phone_number, email, description from applications where id = $1")
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
@@ -52,7 +52,7 @@ func (r *Repository) GetApplicationByIdRepository(ctx context.Context, id string
 
 	var applicationObject application.Object
 
-	if err := stmt.QueryRowContext(ctx, id).Scan(&applicationObject.ID, &applicationObject.Name, &applicationObject.PhoneNumber); err != nil {
+	if err := stmt.QueryRowContext(ctx, id).Scan(&applicationObject.ID, &applicationObject.Name, &applicationObject.PhoneNumber, &applicationObject.Email, &applicationObject.Description); err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)
 	}
 
@@ -64,13 +64,13 @@ func (r *Repository) CreateApplicationRepository(ctx context.Context, creation a
 
 	id, _ := uuid.NewV4()
 
-	stmt, err := r.DB.PrepareContext(ctx, "INSERT INTO applications (id, name, phone_number, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)")
+	stmt, err := r.DB.PrepareContext(ctx, "INSERT INTO applications (id, name, phone_number, email, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7)")
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}
 	defer stmt.Close()
 
-	_, err = stmt.ExecContext(ctx, id, creation.Name, creation.PhoneNumber, time.Now(), time.Now())
+	_, err = stmt.ExecContext(ctx, id, creation.Name, creation.PhoneNumber, creation.Email, creation.Description, time.Now(), time.Now())
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}

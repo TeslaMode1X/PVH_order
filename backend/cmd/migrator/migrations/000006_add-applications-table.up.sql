@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS applications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(255) NOT NULL,
     phone_number VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
